@@ -11,24 +11,36 @@
 <body>
   <a class="skip" href="#analysis">Saltar a los resultados</a>
   <header class="masthead">
-    <div class="identity"><span class="stamp" aria-hidden="true">R<span></span></span><div><a class="wordmark" href="#analysis">Resguarda</a><p>Mesa de planificación de planta</p></div></div>
-    <p class="horizon">HCC · Caso de estudio<span>05 oct 2026 a 01 oct 2027 · 52 semanas · USD</span></p>
+    <div class="identity"><a class="wordmark" href="#analysis">Resguarda</a><span>Simulador de producción</span></div>
+    <p class="horizon">HCC · Caso académico<span>05 oct 2026 a 01 oct 2027 · 52 semanas · USD</span></p>
   </header>
+  <section class="plan-toolbar" aria-label="Plan y escenario">
+    <div class="field"><label for="preset">Estrategia</label><select id="preset" name="preset" form="plan-form"></select></div>
+    <div class="field"><label for="scenario">Escenario</label><select name="scenario" id="scenario" form="plan-form"><option value="base">Base</option><option value="optimista">Optimista</option><option value="canal">Llenado de canal</option></select></div>
+    <button type="button" id="open-settings" aria-haspopup="dialog" aria-controls="control-panel">Ajustar plan</button>
+    <button type="button" class="quiet" id="download-csv" aria-label="Descargar resultados CSV">Descargar CSV</button>
+    <p class="control-help" id="preset-description"></p>
+  </section>
   <nav class="views" aria-label="Vistas del simulador">
-    <button type="button" data-view="plant" aria-current="page"><span>01</span> Planta</button>
-    <button type="button" data-view="weeks"><span>02</span> Producción</button>
-    <button type="button" data-view="strategies"><span>03</span> Estrategias</button>
-    <button type="button" data-view="sensitivity"><span>04</span> Sensibilidad</button>
+    <button type="button" data-view="plant" aria-current="page">Planta</button>
+    <button type="button" data-view="weeks">Producción</button>
+    <button type="button" data-view="strategies">Estrategias</button>
+    <button type="button" data-view="sensitivity">Sensibilidad</button>
   </nav>
   <div class="workspace">
-    <aside class="controls" aria-label="Configuración del simulador">
-      <details id="control-panel" open>
-        <summary>Configurar plan <span class="control-state">abrir / cerrar</span></summary>
-        <form id="plan-form" novalidate>
-          <div id="form-errors" class="errors" role="alert" tabindex="-1" hidden></div>
-          <label class="field">Partir de una estrategia<select id="preset" name="preset"></select></label>
-          <p class="control-help" id="preset-description"></p>
-          <label class="field">Escenario visible<select name="scenario" id="scenario"><option value="base">Base</option><option value="optimista">Optimista</option><option value="canal">Llenado de canal</option></select></label>
+    <main id="analysis" tabindex="-1">
+      <p id="plan-label" class="sr-only"></p>
+      <p id="pending-notice" class="pending-notice" role="status" hidden>Hay cambios sin calcular. Los resultados corresponden al último plan calculado.</p>
+      <div id="results"></div>
+      <details class="method"><summary>Datos, fórmulas y validación</summary><div id="method-content"></div></details>
+    </main>
+  </div>
+  <dialog id="control-panel" class="controls" aria-labelledby="settings-title">
+    <div class="dialog-head"><div><h2 id="settings-title">Ajustar plan</h2><p>Modifica los valores y calcula para ver el resultado.</p></div><button type="button" id="close-settings">Cerrar</button></div>
+    <form id="plan-form" novalidate>
+      <div class="dialog-body">
+        <div id="form-errors" class="errors" role="alert" tabindex="-1" hidden></div>
+        <div class="control-grid"><div>
           <fieldset><legend>Líneas y jornada</legend>
             <div class="field-pair"><label>Líneas<select name="lines"><option value="2">2 líneas</option><option value="3">3 líneas</option></select></label><label>Personas por línea<select name="operators"><option value="6">6 personas</option><option value="8">8 personas</option><option value="5">5, con proveedor</option></select></label></div>
             <div class="field-pair"><label data-for="lineStart">Tercera línea en semana<input name="lineStart" type="number" min="1" max="52" step="1" required></label><label data-for="rebalanceStart">Reequilibrio en semana<input name="rebalanceStart" type="number" min="1" max="52" step="1" required></label></div>
@@ -36,10 +48,6 @@
             <div class="field-pair"><label data-for="shift2Start">Segundo desde semana<input name="shift2Start" type="number" min="1" max="52" step="1" required></label><label data-for="shift3Start">Tercero desde semana<input name="shift3Start" type="number" min="1" max="52" step="1" required></label></div>
             <label class="field">Sábados por mes<select name="saturdays"><option value="0">0</option><option value="1">Hasta 1</option><option value="2">Hasta 2</option><option value="3">Hasta 3</option></select></label>
             <label class="check"><input name="sequential" type="checkbox"> Revisar turnos por fases desde S13</label>
-          </fieldset>
-          <fieldset><legend>Producción</legend>
-            <div class="field-pair"><label>Lote (unidades)<input name="lot" type="number" min="25" max="400" step="1" required></label><label>Cambio (minutos)<input name="setup" type="number" min="5" max="40" step="1" required></label></div>
-            <label class="field">Colchón de inventario (unidades)<input name="buffer" type="number" min="0" max="1500" step="50" required></label>
           </fieldset>
           <details class="more-controls" id="additional-options"><summary>Células y puerta</summary>
             <fieldset><legend class="sr-only">Células y puerta</legend>
@@ -50,6 +58,11 @@
               <p class="control-help">Con proveedor, selecciona cinco personas. El caso no define la combinación con ocho estaciones o con dispositivo.</p>
             </fieldset>
           </details>
+        </div><div>
+          <fieldset><legend>Producción</legend>
+            <div class="field-pair"><label>Lote (unidades)<input name="lot" type="number" min="25" max="400" step="1" required></label><label>Cambio (minutos)<input name="setup" type="number" min="5" max="40" step="1" required></label></div>
+            <label class="field">Colchón de inventario (unidades)<input name="buffer" type="number" min="0" max="1500" step="50" required></label>
+          </fieldset>
           <details class="more-controls" id="demand-assumptions"><summary>Probabilidades y mezcla</summary>
             <fieldset><legend class="sr-only">Demanda</legend>
               <div class="probabilities"><label>Base %<input name="probBase" type="number" min="0" max="100" step="1" required></label><label>Optimista %<input name="probOptimistic" type="number" min="0" max="100" step="1" required></label><label>Canal %<input name="probChannel" type="number" min="0" max="100" step="1" required></label></div>
@@ -65,19 +78,12 @@
               <p class="control-help">El caso fija fallas 4% / 6% y rendimientos 92% / 88%. Otros valores de esos campos son pruebas de sensibilidad.</p>
             </fieldset>
           </details>
-          <div class="form-actions"><button class="primary" type="submit">Calcular plan</button><button class="quiet" type="button" id="reset-plan">Restablecer</button></div>
-          <p id="form-status" class="control-help" role="status" aria-live="polite">Plan calculado.</p>
-          <p class="control-help">Las fechas indican la semana solicitada. El modelo aplica los plazos y límites del caso.</p>
-        </form>
-      </details>
-    </aside>
-    <main id="analysis" tabindex="-1">
-      <div class="analysis-top"><p id="plan-label"></p><button type="button" class="text-button" id="download-csv">Descargar resultados CSV</button></div>
-      <p id="pending-notice" class="pending-notice" role="status" hidden>Hay cambios sin calcular. Los resultados corresponden al último plan calculado.</p>
-      <div id="results"></div>
-      <details class="method"><summary>Datos, fórmulas y validación</summary><div id="method-content"></div></details>
-    </main>
-  </div>
+        </div></div>
+        <p class="control-help">Las fechas indican la semana solicitada. El modelo aplica los plazos y límites del caso.</p>
+      </div>
+      <div class="form-actions"><p id="form-status" class="control-help" role="status" aria-live="polite">Plan calculado.</p><button class="quiet" type="button" id="reset-plan">Restablecer</button><button class="primary" type="submit">Calcular plan</button></div>
+    </form>
+  </dialog>
   <footer class="footer"><p>Resguarda · HCC · Caso académico ISO939</p><p>Félix J. Rodriguez P. <a href="https://canvas.unapec.edu.do/courses/36755/files/11584186?wrap=1" target="_blank" rel="noreferrer">Caso del maestro en Canvas</a></p><p>Apoyo de ChatGPT: programación, verificación y redacción.</p></footer>
   <noscript><p class="errors">Activa JavaScript para calcular el simulador. Los archivos fuente incluyen los datos y las fórmulas.</p></noscript>
   <script>/* APPLICATION */</script>
