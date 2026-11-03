@@ -1,0 +1,12 @@
+{
+  "name": "resguarda-simulador",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "node preview.mjs",
+    "test": "node --test tests/model.test.mjs",
+    "results": "node analysis.mjs"
+  }
+}

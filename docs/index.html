@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Simulador del caso Resguarda: capacidad, demanda y decisiones de inversión durante 52 semanas.">
+  <title>Resguarda | Mesa de planificación</title>
+  <style>:root{--paper:#f6f5ef;--white:#fffefa;--ink:#182f3a;--muted:#53646a;--line:#cbd1cb;--petrol:#18625a;--rust:#a34426;--yellow:#e4bd53;--lightgreen:#e3eee7;--lightred:#faeee5;--rail:#edeFE8;--font:Segoe UI,Arial,sans-serif;font-family:var(--font);color:var(--ink);background:var(--paper);font-synthesis:none;font-size:15px;line-height:1.5}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit;color:inherit}button,select,summary,input[type=checkbox],input[type=range]{cursor:pointer}button{border:1px solid var(--line);border-radius:3px;background:var(--white);min-height:42px;padding:8px 14px;font-weight:600}button:hover{background:#e6eae2}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--rust);outline-offset:3px}input,select{width:100%;background:var(--white);border:1px solid #9caaa6;border-radius:3px;min-height:38px;padding:5px 8px}input[type=checkbox]{width:18px;height:18px;min-height:18px;accent-color:var(--petrol)}a{color:var(--petrol);text-underline-offset:3px}p{margin:0 0 14px}h1,h2,h3{margin:0;color:var(--ink)}h1{font-family:Georgia,serif;font-size:clamp(28px,2.7vw,40px);font-weight:400;line-height:1.17;letter-spacing:-.025em}h2{font-size:19px;line-height:1.3}h3{font-size:15px;line-height:1.4}small,.small{font-size:12px;line-height:1.5;color:var(--muted)}.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}.skip{position:fixed;top:8px;left:8px;transform:translateY(-200%);z-index:50;background:var(--white);padding:10px}.skip:focus{transform:none}
+.masthead{display:flex;justify-content:space-between;align-items:center;padding:23px 34px 19px;gap:24px;border-bottom:1px solid var(--line);background:var(--white)}.identity{display:flex;align-items:center;gap:14px}.stamp{display:grid;place-content:center;width:43px;height:48px;border:2px solid var(--ink);border-radius:22px 22px 2px 2px;font:26px Georgia,serif;position:relative;padding-bottom:5px}.stamp span{position:absolute;bottom:6px;left:8px;right:8px;height:2px;background:var(--ink)}.wordmark{font:34px Georgia,serif;text-decoration:none;letter-spacing:-.04em;color:var(--ink)}.identity p{font-size:12px;margin:0;letter-spacing:.045em}.horizon{font-size:12px;text-align:right;margin:0;font-weight:600}.horizon span{display:block;font-weight:400;margin-top:3px;color:var(--muted)}
+.views{display:grid;grid-template-columns:repeat(4,1fr);background:var(--white);padding:0 34px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}.views button{border:0;border-bottom:3px solid transparent;border-radius:0;text-align:left;background:transparent;padding:17px 16px;font-size:14px;white-space:nowrap}.views button span{font-family:Consolas,monospace;font-size:12px;margin-right:12px;color:var(--muted)}.views button[aria-current]{border-color:var(--petrol);background:var(--lightgreen)}.views button:hover{background:var(--rail)}
+.workspace{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1800px;margin:auto;min-height:920px}.controls{background:var(--rail);border-right:1px solid var(--line);padding:22px 18px 32px;font-size:12px}.controls summary{font-size:15px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:10px}.control-state{font-size:10px;font-weight:500;border:1px solid #a6b6aa;padding:2px 6px;align-self:center}.controls form{margin-top:18px}.field{display:block;margin:0 0 12px}.field select,.field input{margin-top:5px}.field-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 12px}.field-pair input,.field-pair select{margin-top:5px}.probabilities{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:12px}.probabilities input{padding:5px;margin-top:5px}.controls label{color:#29434b;line-height:1.35}.control-help{font-size:11px;color:var(--muted);line-height:1.5;margin:0 0 12px}.controls fieldset{border:0;padding:0;margin:18px 0}.controls legend{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border-top:1px solid #c0c9c0;padding:13px 0 10px;width:100%}.check{display:flex;align-items:flex-start;gap:8px;margin:10px 0;line-height:1.5!important}.check input{flex-shrink:0;margin:1px 0 0}.more-controls{border-top:1px solid #bfcabf;padding:14px 0 0;margin:14px 0}.more-controls summary{font-size:12px;justify-content:flex-start;list-style:disclosure-closed;display:list-item;padding-right:3px}.more-controls[open] summary{list-style:disclosure-open}.more-controls fieldset{margin-top:13px}.form-actions{display:grid;grid-template-columns:1fr;margin:20px 0 10px;gap:7px}.primary{background:var(--petrol);border-color:var(--petrol);color:white}.primary:hover{background:#103f3a;color:white}.quiet{background:transparent;font-size:12px;min-height:32px}.errors{border-left:3px solid var(--rust);background:var(--lightred);padding:12px;color:#762e1b;font-size:13px}.errors p{margin-bottom:8px}.errors p:last-child{margin-bottom:0}
+main{padding:24px 34px 44px;min-width:0}.analysis-top{display:flex;gap:14px;align-items:center;justify-content:space-between;font-size:12px;border-bottom:1px solid var(--line);padding-bottom:13px;margin-bottom:24px}.analysis-top p{margin:0;max-width:65%;font-weight:600}.text-button{border:0;padding:0;min-height:28px;font-size:12px;background:transparent;color:var(--petrol);text-decoration:underline;text-underline-offset:3px;text-align:left}.text-button:hover{background:transparent;color:var(--rust)}.page-intro{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px}.page-intro p{color:var(--muted);font-size:14px;max-width:650px;margin:10px 0 0}.index-label{font-size:11px!important;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--petrol)!important;margin:0 0 8px!important}.period-tag{font-size:12px;white-space:nowrap;align-self:flex-start;background:var(--yellow);padding:5px 9px;font-weight:600;margin-top:9px}
+.ledger{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--ink);border-bottom:1px solid var(--line);margin-bottom:26px;background:var(--white)}.metric{padding:16px 15px 17px;border-right:1px solid var(--line)}.metric:first-child{padding-left:0;background:var(--paper)}.metric:last-child{border:0}.metric dt{font-size:12px;color:var(--muted);margin-bottom:7px}.metric dd{margin:0;font-size:clamp(22px,2.5vw,32px);line-height:1.15;font-variant-numeric:tabular-nums;letter-spacing:-.045em;white-space:nowrap}.metric small{display:block;margin-top:7px;font-size:11px}.positive{color:var(--petrol)}.warning{color:var(--rust)}.week-picker{display:grid;grid-template-columns:185px 1fr auto;align-items:center;gap:18px;border:1px solid var(--line);padding:12px 16px;margin-bottom:24px;background:var(--white)}.week-picker label{font-size:12px;font-weight:600}.week-picker label span{display:block;font-weight:400;color:var(--muted);margin-top:2px}.week-picker input{padding:0;min-height:30px;accent-color:var(--petrol);border:0}.week-picker output{font:700 21px Consolas,monospace;white-space:nowrap;min-width:50px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px}.section-head p{font-size:12px;color:var(--muted);margin:4px 0 0}.section-head .tabs{display:flex;gap:4px;flex-shrink:0}.tabs button{min-height:32px;padding:5px 10px;font-size:12px}.tabs button[aria-pressed=true]{background:var(--ink);color:white;border-color:var(--ink)}
+.line-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid var(--line);margin-bottom:20px;background:var(--white)}.line-summary>div{padding:15px;border-right:1px solid var(--line)}.line-summary>div:last-child{border:0}.line-summary h3{font-size:12px;color:var(--muted);font-weight:400;margin-bottom:6px}.line-summary strong{font-size:20px;font-variant-numeric:tabular-nums}.line-summary p{font-size:12px;margin:5px 0 0}.station-table{width:100%;border-collapse:collapse;font-size:13px}.station-table th,.station-table td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}.station-table thead th{font-size:11px;font-weight:600;color:var(--muted);border-top:1px solid var(--line)}.station-table th:nth-child(2),.station-table th:nth-child(3),.station-table td:nth-child(2),.station-table td:nth-child(3){text-align:right;width:80px}.station-table th:first-child,.station-table td:first-child{padding-left:0;width:45%}.station-id{font:12px Consolas,monospace;display:inline-block;min-width:35px;font-weight:700}.bottleneck{background:var(--lightred)}.bottleneck td:first-child{border-left:3px solid var(--rust);padding-left:9px}.station-op{vertical-align:middle}.bar-wrap{display:flex;align-items:center;gap:9px;min-width:120px}.bar-track{height:9px;background:#e1e6df;flex:1;position:relative}.bar-track span{position:absolute;left:0;top:0;height:100%;background:var(--petrol)}.bottleneck .bar-track span{background:var(--rust)}.bar-wrap output{font-size:11px;min-width:36px;text-align:right;font-variant-numeric:tabular-nums}.table-note{font-size:12px;color:var(--muted);margin:12px 0 22px}.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;border-top:1px solid var(--line);padding:18px 0;margin-bottom:14px}.facts p{font-size:12px;margin:0;color:var(--muted)}.facts strong{display:block;color:var(--ink);font-size:20px;font-weight:600;margin:3px 0}.insight{border-left:3px solid var(--petrol);padding:13px 18px;background:#eaf0e9;margin:20px 0;font-size:13px}.insight p{margin:0}.insight p+p{margin-top:9px}.insight strong{font-weight:700}.two-notes{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:24px 0}.two-notes h3{margin-bottom:7px}.two-notes p{font-size:13px;color:var(--muted);margin:0}.row-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.chart-box{background:var(--white);border:1px solid var(--line);padding:18px 16px 10px;margin:0 0 20px}.chart-scroll{overflow-x:auto;max-width:100%}.chart-box svg{width:100%;min-width:640px;height:auto;display:block;overflow:visible}.chart-box svg text{font-family:var(--font);font-size:13px;fill:var(--muted)}.legend{display:flex;flex-wrap:wrap;gap:12px 24px;font-size:12px;color:var(--muted);margin:0 0 10px}.legend span{display:flex;align-items:center;gap:7px}.legend i{height:3px;width:23px;background:var(--ink);display:inline-block}.legend i.demand{background:var(--rust)}.legend i.capacity{background:var(--petrol)}.legend i.production{background:var(--ink);border-top:3px dotted var(--white)}.legend i.selection{height:12px;width:2px;background:#8a6b13}.table-scroll{overflow-x:auto;max-width:100%;border:1px solid var(--line);background:var(--white)}.data-table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}.data-table caption{text-align:left;padding:14px;font-size:13px;font-weight:600}.data-table th,.data-table td{padding:10px 11px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}.data-table th:first-child,.data-table td:first-child{text-align:left}.data-table thead th{font-size:11px;color:var(--muted);background:#edf0e9}.data-table th{font-weight:600}.data-table tbody tr:last-child td{border-bottom:0}.data-table .selected{background:#e7eee5}.data-table tbody tr:hover{background:#edf0e9}.data-table .best{color:var(--petrol);font-weight:700}.data-table td p,.data-table th p{margin:4px 0 0;font-size:11px;color:var(--muted);white-space:normal;font-weight:400}.strategy-table{min-width:850px}.strategy-table td:first-child,.strategy-table th:first-child{min-width:210px;max-width:250px;white-space:normal}.strategy-table button{font-size:11px;min-height:28px;padding:4px 8px;margin-top:7px}.strategy-table .tag{display:block;font-size:10px;font-weight:600;color:var(--petrol);text-transform:uppercase;letter-spacing:.03em;margin:4px 0}.scroll-hint{font-size:11px;color:var(--muted);margin:6px 0 18px}.detail-list{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;font-size:12px;padding:15px 0}.detail-list div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding-bottom:6px}.detail-list dt{color:var(--muted)}.detail-list dd{margin:0;font-variant-numeric:tabular-nums;text-align:right}.plain-details{margin:22px 0;border-top:1px solid var(--line);padding-top:14px}.plain-details summary{font-size:13px;font-weight:600}.events{padding-left:20px;font-size:13px}.events li{margin:8px 0}.method{border-top:1px solid var(--line);margin-top:34px;padding-top:17px}.method>summary{font-size:13px;font-weight:600}.method h2{font-size:18px;margin:22px 0 12px}.method p,.method li{font-size:12px;color:var(--muted)}.method ol{padding-left:19px}.method li{margin-bottom:9px}.formula{font-family:Consolas,monospace;background:var(--white);padding:12px;border:1px solid var(--line);font-size:12px!important;overflow-wrap:anywhere}.source-note{font-size:12px;color:var(--muted);margin:10px 0}.tornado{display:grid;grid-template-columns:160px 1fr 130px;gap:15px;padding:13px 0;border-bottom:1px solid var(--line);align-items:center;font-size:12px}.tornado-title{font-weight:600}.tornado-title small{display:block;font-weight:400;margin-top:2px}.tornado-bar{height:28px;position:relative;background:#e8ece5}.tornado-bar:before{content:'';position:absolute;left:50%;height:100%;width:1px;background:#8b9992;z-index:1}.tornado-bar span{position:absolute;height:10px;background:var(--petrol);top:3px;min-width:1px}.tornado-bar span.high{background:var(--rust);top:16px}.tornado-values{text-align:right;font-variant-numeric:tabular-nums}.tornado-values span{display:block;color:var(--petrol)}.tornado-values span+span{color:var(--rust)}.thresholds{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:24px 0}.threshold{border-top:2px solid var(--ink);padding:15px 0}.threshold h3{margin-bottom:8px}.threshold p{font-size:13px;margin:0 0 10px;color:var(--muted)}.threshold strong{color:var(--ink)}
+.footer{max-width:1800px;margin:auto;padding:22px 34px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:grid;grid-template-columns:1fr 1.2fr 1.6fr;gap:24px;background:var(--white)}.footer p{margin:0}.footer a{display:block}.empty{padding:30px 0;color:var(--muted)}
+@media(min-width:1500px){.workspace{grid-template-columns:300px minmax(0,1fr)}main{padding:28px 50px 48px}.controls{padding-left:24px;padding-right:24px}}
+@media(max-width:1100px){.views{padding:0 18px}.views button{padding:15px 8px;font-size:12px}.views button span{margin-right:6px}.workspace{grid-template-columns:255px minmax(0,1fr)}main{padding:22px}.metric{padding:14px 10px}.metric dd{font-size:24px}.metric dt{font-size:11px}.station-table th:first-child,.station-table td:first-child{width:40%}.station-table th:nth-child(2),.station-table td:nth-child(2){display:none}.week-picker{grid-template-columns:150px 1fr auto}.tornado{grid-template-columns:130px 1fr 100px;gap:10px}.page-intro{display:block}.period-tag{display:inline-block;margin-top:14px}.section-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:800px){.masthead{padding:18px 20px}.horizon{font-size:11px;max-width:210px}.horizon span{max-width:180px}.wordmark{font-size:30px}.workspace{display:block;min-height:0}.controls{border-right:0;border-bottom:1px solid var(--line);padding:15px 20px}.controls form{max-width:620px;margin:16px auto 0}.controls>details>summary{font-size:14px}.controls input,.controls select{font-size:14px}.controls label,.controls summary{font-size:12px}.controls form .field-pair{gap:18px}.controls .control-help{font-size:12px}.form-actions{grid-template-columns:1fr 1fr}.views{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 12px}.views button{font-size:12px;padding:11px 8px;white-space:normal}.views button span{margin-right:7px}.views button:nth-child(-n+2){border-bottom:1px solid var(--line)}.views button[aria-current]{box-shadow:inset 0 -3px 0 var(--petrol)}main{padding:20px}.metric dd{font-size:26px}.metric dt{font-size:12px}.station-table th:nth-child(2),.station-table td:nth-child(2){display:table-cell}.analysis-top{margin-bottom:23px}.footer{padding:20px;grid-template-columns:1fr;gap:10px}.footer a{display:inline;margin-left:4px}}
+@media(max-width:520px){.masthead{gap:10px;padding:15px 17px}.identity{gap:10px}.stamp{width:34px;height:40px;font-size:21px}.wordmark{font-size:28px}.identity p{font-size:10px;letter-spacing:0}.horizon{font-size:10px;max-width:104px;line-height:1.45}.horizon span{font-size:9px}.views{padding:0 8px}.views button{font-size:11px;line-height:1.4;min-height:45px}.views button span{font-size:10px;margin-right:5px}.controls{padding:14px 17px}.control-state{font-size:10px}.controls form{margin-top:18px}main{padding:18px 17px 30px}.analysis-top{align-items:flex-start;gap:10px;font-size:11px;padding-bottom:12px}.analysis-top p{max-width:58%}.analysis-top .text-button{font-size:10px;max-width:37%;text-align:right;line-height:1.5}.page-intro p{font-size:13px}.page-intro{margin-bottom:20px}.ledger{grid-template-columns:1fr 1fr;margin-bottom:22px}.metric{padding:13px 12px!important;min-height:112px}.metric:first-child{background:var(--white)}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}.metric dd{font-size:28px;letter-spacing:-.03em}.metric dt{font-size:11px}.metric small{font-size:10px}.week-picker{grid-template-columns:1fr auto;padding:12px;gap:4px 12px}.week-picker input{grid-row:2;grid-column:1/-1;min-height:32px}.week-picker label{font-size:12px}.week-picker output{grid-row:1;grid-column:2}.line-summary{grid-template-columns:1fr 1fr 1fr}.line-summary>div{padding:11px 9px}.line-summary strong{font-size:17px}.line-summary h3{font-size:10px}.line-summary p{font-size:10px}.station-table{font-size:12px}.station-table th,.station-table td{padding:11px 6px}.station-table thead th{font-size:10px}.station-table th:first-child,.station-table td:first-child{width:40%}.station-table th:nth-child(2),.station-table td:nth-child(2),.station-table th:nth-child(3),.station-table td:nth-child(3){width:40px}.station-op{display:block;font-size:11px;line-height:1.35}.station-id{min-width:25px}.bar-wrap{min-width:75px;gap:5px}.bar-wrap output{font-size:10px;min-width:31px}.facts{grid-template-columns:1fr 1fr;gap:18px 14px}.facts strong{font-size:18px}.facts p{font-size:11px}.two-notes,.thresholds{grid-template-columns:1fr;gap:16px}.insight{padding:12px 13px;font-size:12px}.chart-box{padding:14px 10px 8px}.legend{font-size:10px;gap:7px 13px}.legend i{width:16px}.detail-list{grid-template-columns:1fr}.tornado{grid-template-columns:1fr 84px;gap:7px 10px;padding:13px 0}.tornado-title{grid-column:1}.tornado-title small{font-size:10px}.tornado-values{grid-row:1/3;grid-column:2;font-size:10px}.tornado-bar{grid-row:2;grid-column:1}.table-note,.source-note{font-size:11px}.footer{font-size:10px;padding:18px}}
+/* Revisión de uso: menos elementos simultáneos y controles más claros. */
+[hidden]{display:none!important}
+h1{font-family:var(--font);font-size:28px;font-weight:650;line-height:1.2;letter-spacing:-.025em}
+main,.controls .errors{scroll-margin-top:64px}
+.masthead{padding-top:16px;padding-bottom:15px}
+.wordmark{font-size:31px}
+.views button{padding-top:12px;padding-bottom:12px;min-height:46px}
+.page-intro{margin-bottom:20px}
+.controls{font-size:13px}
+.controls label,.controls legend,.more-controls summary{font-size:13px}
+.control-help{font-size:12px}
+.controls input,.controls select{min-height:42px;font-size:14px}
+.controls fieldset{margin:14px 0}
+.field-pair:has(>label[hidden]){grid-template-columns:1fr}
+.form-actions{position:sticky;bottom:0;z-index:6;background:var(--rail);border-top:1px solid var(--line);padding:10px 0;margin-top:16px;grid-template-columns:1.3fr 1fr}
+.form-actions button{font-size:13px;min-height:44px;padding:8px 5px}
+.controls input,.controls select{scroll-margin-top:72px;scroll-margin-bottom:110px}
+.check{min-height:44px;align-items:center;padding:6px 0}
+input[aria-invalid=true],select[aria-invalid=true]{border:2px solid var(--rust)}
+.field-error{display:block;color:#762e1b;font-size:12px;font-weight:400;line-height:1.4;margin:5px 0 12px}
+.errors a{color:#762e1b;font-weight:600}
+.pending-notice{padding:10px 14px;border-left:3px solid #9b751e;background:#faf0cf;font-size:13px;margin-bottom:20px}
+button:disabled{cursor:default;opacity:.5;text-decoration:none}
+.tabs button,.strategy-table button{min-height:40px}
+.plain-details>summary,.method>summary{padding:7px 0;min-height:38px}
+.chart-box svg{min-width:0}
+.week-cost{font-size:13px;border-top:1px solid var(--line);padding-top:14px}
+.footer{font-size:12px;grid-template-columns:1fr 1.3fr 1.5fr}
+@media(max-width:800px){
+  .views{grid-template-columns:repeat(4,minmax(0,1fr));padding:0 8px}
+  .views button{font-size:13px;text-align:center;padding:10px 3px;min-height:46px;border-bottom:3px solid transparent}
+  .views button span{display:none}
+  .views button:nth-child(-n+2){border-bottom:3px solid transparent}
+  .views button[aria-current]{border-bottom-color:var(--petrol);box-shadow:none}
+  .controls input,.controls select{font-size:16px;min-height:44px}
+  .controls label,.controls summary{font-size:13px}
+  .footer{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  h1{font-size:25px;line-height:1.2}
+  .masthead{padding:14px 17px}
+  .views button{font-size:12px}
+  .page-intro p{font-size:14px}
+  .analysis-top{font-size:12px}
+  .analysis-top .text-button{font-size:12px;min-height:44px}
+  .control-state{font-size:11px}
+  .metric dt,.metric small{font-size:12px}
+  .metric dd{font-size:26px}
+  .line-summary h3,.line-summary p{font-size:12px}
+  .line-summary strong{font-size:16px}
+  .station-table thead th,.station-op,.bar-wrap output{font-size:12px}
+  .bar-wrap{min-width:70px}
+  .tabs button,.strategy-table button,.data-table button{min-height:44px}
+  .legend,.scroll-hint,.table-note,.source-note,.facts p,.tornado-title small,.tornado-values,.footer{font-size:12px}
+  .chart-box{padding:14px 10px 8px}
+  .chart-box svg text{font-size:13px}
+  .plain-details>summary,.method>summary{min-height:44px}
+  .tornado{grid-template-columns:1fr 94px}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+  <a class="skip" href="#analysis">Saltar a los resultados</a>
+  <header class="masthead">
+    <div class="identity"><span class="stamp" aria-hidden="true">R<span></span></span><div><a class="wordmark" href="#analysis">Resguarda</a><p>Mesa de planificación de planta</p></div></div>
+    <p class="horizon">HCC · Caso de estudio<span>05 oct 2026 a 01 oct 2027 · 52 semanas · USD</span></p>
+  </header>
+  <nav class="views" aria-label="Vistas del simulador">
+    <button type="button" data-view="plant" aria-current="page"><span>01</span> Planta</button>
+    <button type="button" data-view="weeks"><span>02</span> Producción</button>
+    <button type="button" data-view="strategies"><span>03</span> Estrategias</button>
+    <button type="button" data-view="sensitivity"><span>04</span> Sensibilidad</button>
+  </nav>
+  <div class="workspace">
+    <aside class="controls" aria-label="Configuración del simulador">
+      <details id="control-panel" open>
+        <summary>Configurar plan <span class="control-state">abrir / cerrar</span></summary>
+        <form id="plan-form" novalidate>
+          <div id="form-errors" class="errors" role="alert" tabindex="-1" hidden></div>
+          <label class="field">Partir de una estrategia<select id="preset" name="preset"></select></label>
+          <p class="control-help" id="preset-description"></p>
+          <label class="field">Escenario visible<select name="scenario" id="scenario"><option value="base">Base</option><option value="optimista">Optimista</option><option value="canal">Llenado de canal</option></select></label>
+          <fieldset><legend>Líneas y jornada</legend>
+            <div class="field-pair"><label>Líneas<select name="lines"><option value="2">2 líneas</option><option value="3">3 líneas</option></select></label><label>Personas por línea<select name="operators"><option value="6">6 personas</option><option value="8">8 personas</option><option value="5">5, con proveedor</option></select></label></div>
+            <div class="field-pair"><label data-for="lineStart">Tercera línea en semana<input name="lineStart" type="number" min="1" max="52" step="1" required></label><label data-for="rebalanceStart">Reequilibrio en semana<input name="rebalanceStart" type="number" min="1" max="52" step="1" required></label></div>
+            <label class="field">Turnos máximos<select name="shifts"><option value="1">1 turno</option><option value="2">2 turnos</option><option value="3">3 turnos</option></select></label>
+            <div class="field-pair"><label data-for="shift2Start">Segundo desde semana<input name="shift2Start" type="number" min="1" max="52" step="1" required></label><label data-for="shift3Start">Tercero desde semana<input name="shift3Start" type="number" min="1" max="52" step="1" required></label></div>
+            <label class="field">Sábados por mes<select name="saturdays"><option value="0">0</option><option value="1">Hasta 1</option><option value="2">Hasta 2</option><option value="3">Hasta 3</option></select></label>
+            <label class="check"><input name="sequential" type="checkbox"> Revisar turnos por fases desde S13</label>
+          </fieldset>
+          <fieldset><legend>Producción</legend>
+            <div class="field-pair"><label>Lote (unidades)<input name="lot" type="number" min="25" max="400" step="1" required></label><label>Cambio (minutos)<input name="setup" type="number" min="5" max="40" step="1" required></label></div>
+            <label class="field">Colchón de inventario (unidades)<input name="buffer" type="number" min="0" max="1500" step="50" required></label>
+          </fieldset>
+          <details class="more-controls" id="additional-options"><summary>Células y puerta</summary>
+            <fieldset><legend class="sr-only">Células y puerta</legend>
+              <div class="field-pair"><label>Células<input name="cells" type="number" min="0" max="10" step="1" required></label><label data-for="cellWorkers">Personas por célula<input name="cellWorkers" type="number" min="1" max="3" step="1" required></label></div>
+              <div class="field-pair"><label data-for="cellStart">Primeras células en semana<input name="cellStart" type="number" min="1" max="52" step="1" required></label><label data-for="cellPenalty">Polivalencia (%)<input name="cellPenalty" type="number" min="0" max="20" step="1" required></label></div>
+              <label class="check"><input name="automation" type="checkbox"> Dispositivo semiautomático</label><label class="field" data-for="automationStart">Dispositivo en semana<input name="automationStart" type="number" min="1" max="52" step="1" required></label>
+              <label class="check"><input name="outsource" type="checkbox"> Subcontratar la puerta</label><label class="field" data-for="outsourceStart">Subcontratación en semana<input name="outsourceStart" type="number" min="1" max="52" step="1" required></label>
+              <p class="control-help">Con proveedor, selecciona cinco personas. El caso no define la combinación con ocho estaciones o con dispositivo.</p>
+            </fieldset>
+          </details>
+          <details class="more-controls" id="demand-assumptions"><summary>Probabilidades y mezcla</summary>
+            <fieldset><legend class="sr-only">Demanda</legend>
+              <div class="probabilities"><label>Base %<input name="probBase" type="number" min="0" max="100" step="1" required></label><label>Optimista %<input name="probOptimistic" type="number" min="0" max="100" step="1" required></label><label>Canal %<input name="probChannel" type="number" min="0" max="100" step="1" required></label></div>
+              <div class="field-pair"><label>Pro S1 a S26 (%)<input name="proFirst" type="number" min="20" max="50" step="1" required></label><label>Pro S27 a S52 (%)<input name="proSecond" type="number" min="20" max="50" step="1" required></label></div>
+              <p class="control-help">Las probabilidades suman 100%. Estos supuestos se aplican a las seis estrategias comparadas.</p>
+            </fieldset>
+          </details>
+          <details class="more-controls" id="quality-assumptions"><summary>Calidad y rendimientos</summary>
+            <fieldset><legend class="sr-only">Calidad y rendimientos</legend>
+              <div class="field-pair"><label>Fallas Estándar (%)<input name="failStd" type="number" min="0" max="15" step=".1" required></label><label>Fallas Pro (%)<input name="failPro" type="number" min="0" max="15" step=".1" required></label></div>
+              <div class="field-pair"><label>Rendimiento T2 (%)<input name="yield2" type="number" min="50" max="100" step="1" required></label><label>Rendimiento T3 (%)<input name="yield3" type="number" min="50" max="100" step="1" required></label></div>
+              <label class="field">WIP de referencia por línea (u)<input name="wip" type="number" min="1" max="300" step="1" required></label>
+              <p class="control-help">El caso fija fallas 4% / 6% y rendimientos 92% / 88%. Otros valores de esos campos son pruebas de sensibilidad.</p>
+            </fieldset>
+          </details>
+          <div class="form-actions"><button class="primary" type="submit">Calcular plan</button><button class="quiet" type="button" id="reset-plan">Restablecer</button></div>
+          <p id="form-status" class="control-help" role="status" aria-live="polite">Plan calculado.</p>
+          <p class="control-help">Las fechas indican la semana solicitada. El modelo aplica los plazos y límites del caso.</p>
+        </form>
+      </details>
+    </aside>
+    <main id="analysis" tabindex="-1">
+      <div class="analysis-top"><p id="plan-label"></p><button type="button" class="text-button" id="download-csv">Descargar resultados CSV</button></div>
+      <p id="pending-notice" class="pending-notice" role="status" hidden>Hay cambios sin calcular. Los resultados corresponden al último plan calculado.</p>
+      <div id="results"></div>
+      <details class="method"><summary>Datos, fórmulas y validación</summary><div id="method-content"></div></details>
+    </main>
+  </div>
+  <footer class="footer"><p>Resguarda · HCC · Caso académico ISO939</p><p>Félix J. Rodriguez P. <a href="https://canvas.unapec.edu.do/courses/36755/files/11584186?wrap=1" target="_blank" rel="noreferrer">Caso del maestro en Canvas</a></p><p>Apoyo de ChatGPT: programación, verificación y redacción.</p></footer>
+  <noscript><p class="errors">Activa JavaScript para calcular el simulador. Los archivos fuente incluyen los datos y las fórmulas.</p></noscript>
+  <script>(()=>{
+'use strict';
+const SOURCE = {
+  title: 'Resguarda: producir al ritmo de la demanda',
+  author: 'Félix J. Rodriguez P.',
+  url: 'https://canvas.unapec.edu.do/courses/36755/files/11584186?wrap=1',
+  assignment: 'https://canvas.unapec.edu.do/courses/36755/assignments/1858224',
+  company: 'Hogar Conectado del Caribe, S.R.L. (HCC)',
+  note: 'Caso docente con empresa y cifras ficticias. Datos de los anexos 1 a 11.',
+};
+const DEMAND = {
+  base: [700,800,950,1050,1150,1300,1550,1900,1750,1700,1650,1300,900,960,970,970,980,990,1000,1000,1010,1020,1030,1040,1050,1050,1060,1070,1080,1090,1100,1110,1280,1290,1130,1140,1150,1160,1170,1180,1190,1200,1210,1220,1230,1240,1250,1260,1270,1280,1290,1300],
+  optimista: [700,800,950,1050,1380,1560,1860,2280,2100,2040,1980,1560,1080,1150,1160,1160,1180,1190,1200,1200,1210,1220,1240,1250,1260,1260,1270,1280,1300,1310,1320,1330,1540,1550,1360,1370,1380,1390,1400,1420,1430,1440,1450,1460,1480,1490,1500,1510,1520,1540,1550,1560],
+  canal: [700,800,950,1050,1150,1300,1550,1900,1750,1700,1300,1000,650,650,650,660,660,660,660,660,670,670,670,670,670,680,680,680,680,680,690,690,760,760,690,700,700,700,700,700,710,710,710,710,720,720,720,720,720,730,730,730],
+};
+const SCENARIOS = ['base', 'optimista', 'canal'];
+const LABELS = {base:'Base',optimista:'Optimista',canal:'Llenado de canal'};
+const CASE = {
+  price:[129,169], material:[58,74], margin:[71,95],
+  warrantyRate:.008, warrantyCost:85, benefits:1.30,
+  wages:{operator:6.50,test:7.50,handler:7.50,rework:7.50,leader:9,cell:7.20},
+  supervisor:1050, fixed:3200, shiftFixed:600, hireCost:350,
+  hireLimit:12, learning:[.70,.80,.90,.95,1],
+  recoverable:.80, reworkMinutes:15, stockInitial:[210,90],
+  carryAnnual:.24, backlogFraction:.5, backlogPenalty:3, imageLoss:10,
+  maxFG:1500, weeks:52, discountAnnual:.12, investmentLimit:120000,
+  area:420, occupied:240, extraArea:200, leaseWeek:11, leaseRate:6, leaseMin:26,
+  lineArea:120, cellArea:40, externalDoorCost:4.80, externalDoorLimit:1200,
+  residual:.8, start:'2026-10-05', end:'2027-10-01',
+};
+const ROUTES = {
+  six:{ids:['E1','E2','E3','E4','E5','E6'],names:['Gabinete y soldadura','Subconjunto de puerta','Puerta y arnés','Montaje eléctrico','Inspección y pruebas','Empaque'],std:[6.5,6.2,8,7,6.5,5+4/6],pro:[6.5,6.2,8,8.6,7.5,5+4/6],cv:[.10,.18,.15,.12,.05,.08]},
+  eight:{ids:['L1','L2','L3','L4','L5','L6','L7','L8'],names:['Gabinete','Soldadura','Puerta','Cableado','Instalación de puerta','Eléctrico e inspección','Pruebas','Empaque'],std:[5,5.2,5.8,4.1,4.3,4.8,5,5+4/6],pro:[5,5.2,5.8,4.1,4.3,6.4,6,5+4/6]},
+};
+const DEFAULTS = {
+  lines:2, lineStart:9, operators:6, rebalanceStart:4,
+  shifts:1, shift2Start:3, shift3Start:5,
+  saturdays:0, cells:0, cellWorkers:3, cellStart:6,
+  automation:false, automationStart:11, outsource:false, outsourceStart:5,
+  lot:100, setup:20, proFirst:.30, proSecond:.35,
+  cellPenalty:.08, failStd:.04, failPro:.06, yield2:.92, yield3:.88,
+  buffer:600, wip:46, sequential:false, reviewEvery:4,
+  probabilities:{base:.50,optimista:.25,canal:.25},
+};
+const STRATEGIES = [
+  {id:'actual',name:'A. Planta actual',short:'Actual',description:'Dos líneas de seis personas, un turno. Referencia sin ampliar capacidad.',changes:{}},
+  {id:'turnos',name:'B. Turnos y sábados',short:'Turnos',description:'Segundo turno desde S3 y tercero desde S5; hasta tres sábados al mes si hacen falta. Sin inversión en equipo.',changes:{shifts:3,saturdays:3}},
+  {id:'reequilibrio',name:'C. Reequilibrio y dos turnos',short:'Reequilibrio',description:'Ocho personas por línea desde S4; segundo turno desde S3 y sábados cuando falte capacidad.',changes:{operators:8,shifts:2,saturdays:3}},
+  {id:'linea',name:'D. Tercera línea y dos turnos',short:'Tercera línea',description:'Tercera línea de seis personas desde S9, dos turnos y sábados según necesidad.',changes:{lines:3,shifts:2,saturdays:3}},
+  {id:'celulas',name:'E. Cuatro células y dos turnos',short:'Células',description:'Se conservan las dos líneas y se añaden cuatro células desde S6; dos turnos y sábados según necesidad.',changes:{cells:4,shifts:2,saturdays:3}},
+  {id:'fases',name:'F. Reequilibrio por fases',short:'Por fases',description:'Ocho personas por línea, segundo turno S3 y tercero S5 para temporada; lote de 400 y colchón de 300. Desde S13 se revisan turnos cada cuatro semanas usando pedidos ya observados.',changes:{operators:8,shifts:3,saturdays:3,sequential:true,lot:400,buffer:300}},
+];
+const ASSUMPTIONS = [
+  'Modelo semanal determinista de valores esperados; se conservan decimales. No se generan distribuciones aleatorias a partir de los CV.',
+  'Decisión inicial en S0, antes del 5 de octubre. Entrada mínima = semana de pedido + plazo + 1. Herramientas se preparan sin detener toda la planta. Se programa un pedido de hasta cuatro células por semana; los pedidos siguientes se escalonan.',
+  'Contratación al entrar la capacidad, hasta 12 personas por semana. Se paga desde la incorporación. Aprendizaje por cohorte; la línea usa el menor rendimiento medio entre operadores y técnico. Una tripulación incompleta no opera esa línea.',
+  'Los equipos de turnos adicionales son temporales. Una reducción de turno libera personal nuevo sin indemnización adicional; no se despide la plantilla original. Los costos de salida no aparecen en el caso y requieren confirmación.',
+  'Producción por SKU para demanda corriente, pendientes y un colchón fijo editable (600 u por defecto), con tope de 1.500 unidades. El mix asigna el tiempo por las fórmulas del caso; cambios y lotes se prorratean, sin redondear lotes completos.',
+  'Pedidos pendientes FIFO por variante, atendibles en las dos semanas siguientes. Se cobra USD 3 por cada cierre semanal pendiente; vencen al terminar la segunda semana de espera. No se sustituyen variantes.',
+  'El técnico recupera 80% de fallas, limitado por sus minutos. Lo no retrabajado queda en proceso. Células reducen fallas un punto porcentual; cambio de cinco minutos por célula y lote.',
+  'Para mezclar líneas y células se requiere un manipulador por cada carga equivalente de tres líneas o seis células, redondeada hacia arriba. El líder sustituye al primero en turnos 2 y 3. Se prioriza el anexo 6: una tercera línea sola no exige otro manipulador.',
+  'Se reservan 180 m² para ampliar capacidad, según el anexo 10. Se alquilan los 200 m² completos solo cuando hacen falta, desde S11; se respeta el mínimo de 26 semanas, incluida la obligación posterior al horizonte.',
+  'No se combinan subcontratación con ocho estaciones ni con dispositivo, porque el caso no define esos tiempos. El máximo de 1.200 puertas limita toda la producción de líneas subcontratadas por semana.',
+  'Caja: ventas cobradas y materiales pagados en la misma semana; inventario inicial es hundido, sin recuperación terminal del inventario final. Se deducen USD 10 por venta perdida; el margen omitido ya está ausente de ventas y no se resta dos veces. El costo de oportunidad completo se informa aparte. El residual de 80% se aplica al equipo recibido dentro del horizonte.',
+  'Desde S13, la política por fases revisa cada cuatro semanas: un turno si el promedio observado de cuatro semanas no supera 95% de su capacidad madura; dos si no supera 95% de dos; tres en otro caso. Aumentos se solicitan con dos semanas de anticipación y vuelven a aprender si se recontrata.',
+  'Sábados de primer turno solo si se necesita cubrir demanda, pendientes o colchón; se programan en orden cronológico, máximo seleccionado por mes calendario. No hay costo fijo sabatino adicional definido en el caso.',
+];
+
+const C = CASE;
+
+const sum = a=>a.reduce((s,x)=>s+x,0);
+const avg = a=>a.length ? sum(a)/a.length : 0;
+const EPS=1e-7;
+const weeklyDiscount=(1+C.discountAnnual)**(1/52)-1;
+const discount=(value,week)=>value/(1+weeklyDiscount)**week;
+function config(changes={}) {return {...DEFAULTS,...changes,probabilities:{...DEFAULTS.probabilities,...changes.probabilities}};}
+function dateForWeek(w,offset=0) {
+  const d=new Date(`${C.start}T12:00:00Z`); d.setUTCDate(d.getUTCDate()+7*(w-1)+offset); return d.toISOString().slice(0,10);
+}
+function mixForWeek(c,w) {return w<=26 ? c.proFirst : c.proSecond;}
+function routeMetrics(operators=6,automated=false,outsourced=false,p=.3,lot=100,setup=20) {
+  const r=ROUTES[operators===8?'eight':'six'];
+  let ids=[...r.ids],names=[...r.names],std=[...r.std],pro=[...r.pro];
+  if(automated) {if(operators===8){std[2]=pro[2]=5.2;std[4]=pro[4]=3.3;}else{std[1]=pro[1]=5.6;std[2]=pro[2]=6;}}
+  if(outsourced) {std[2]=pro[2]=7.2;[ids,names,std,pro]=[ids,names,std,pro].map(a=>a.filter((_,i)=>i!==1));}
+  const content=[sum(std),sum(pro)], cycle=[Math.max(...std),Math.max(...pro)];
+  const bottleneck=[ids.filter((_,i)=>Math.abs(std[i]-cycle[0])<EPS).join('/'),ids.filter((_,i)=>Math.abs(pro[i]-cycle[1])<EPS).join('/')];
+  const mixedCycle=(1-p)*cycle[0]+p*cycle[1];
+  return {ids,names,std,pro,content,cycle,bottleneck,mixedCycle,effectiveCycle:mixedCycle+setup/lot,
+    efficiency:content.map((x,i)=>x/(ids.length*cycle[i])),
+    gross:2250/(mixedCycle+setup/lot),flowHours:46*(mixedCycle+setup/lot)/60,
+    stationMix:std.map((x,i)=>((1-p)*x+p*pro[i])/(mixedCycle+setup/lot))};
+}
+function controls() {
+  const r=routeMetrics(),gross=2*r.gross,fail=.7*.04+.3*.06,good=gross*(1-fail*.2);
+  const labor=((10*6.5+2*7.5+2*7.5)*40)*1.3+1050;
+  return {contentStd:r.content[0],contentPro:r.content[1],cycleStd:r.cycle[0],cyclePro:r.cycle[1],
+    balanceStd:r.efficiency[0]*100,balancePro:r.efficiency[1]*100,mixedCycle:r.mixedCycle,
+    grossLine:r.gross,grossPlant:gross,good,rework:gross*fail*.8,
+    flowHours:r.flowHours,taktWeek8:2250/(1900/2),labor,laborPerGood:labor/good,
+    margin:.7*71+.3*95,grossTwoShifts:gross*1.92};
+}
+const CONTROL_TARGETS=[
+  ['contentStd','Contenido Estándar',39.87,2,'min'],['contentPro','Contenido Pro',42.47,2,'min'],
+  ['cycleStd','Ciclo Estándar · E3',8,2,'min'],['cyclePro','Ciclo Pro · E4',8.6,2,'min'],
+  ['balanceStd','Balance Estándar',83.1,1,'%'],['balancePro','Balance Pro',82.3,1,'%'],
+  ['mixedCycle','Ciclo de la mezcla',8.18,2,'min'],['grossLine','Capacidad bruta por línea',268.5,1,'u/sem'],
+  ['grossPlant','Capacidad bruta de planta',537,1,'u/sem'],['good','Unidades buenas',532.1,1,'u/sem'],
+  ['rework','Retrabajo',19.8,1,'u/sem'],['flowHours','Flujo por Little',6.42,2,'h'],
+  ['taktWeek8','Takt S8 base, por línea',2.37,2,'min'],['labor','Mano de obra semanal',5990,0,'USD'],
+  ['laborPerGood','Mano de obra por buena',11.26,2,'USD/u'],['margin','Contribución antes de MO',78.2,2,'USD/u'],
+  ['grossTwoShifts','Dos turnos sin aprendizaje',1031,1,'u/sem'],
+];
+function validate(c) {
+  const errors=[];
+  const range=(key,min,max,int=false)=>{if(!Number.isFinite(c[key])||c[key]<min||c[key]>max||(int&&!Number.isInteger(c[key])))errors.push(`${key}: usa un valor entre ${min} y ${max}${int?', entero':''}.`);};
+  range('lines',2,3,true);range('shifts',1,3,true);range('saturdays',0,3,true);range('cells',0,10,true);range('cellWorkers',1,3,true);
+  for(const k of ['lineStart','rebalanceStart','shift2Start','shift3Start','cellStart','automationStart','outsourceStart'])range(k,1,52,true);
+  range('lot',25,400,true);range('setup',5,40);range('proFirst',.2,.5);range('proSecond',.2,.5);range('cellPenalty',0,.2);
+  range('failStd',0,.15);range('failPro',0,.15);range('yield2',.5,1);range('yield3',.5,1);range('buffer',0,1500);range('wip',1,300);
+  if(![5,6,8].includes(c.operators))errors.push('Selecciona 6, 8 o 5 personas por línea.');
+  if(c.operators===5&&!c.outsource)errors.push('Cinco personas requieren subcontratar la puerta. Activa esa opción.');
+  if(c.outsource&&c.operators!==5)errors.push('Al subcontratar, selecciona cinco personas por línea.');
+  if(c.outsource&&c.automation)errors.push('El caso no define subcontratación con dispositivo. Elige una opción.');
+  if(c.lines===3&&c.lineStart<9)errors.push('La tercera línea entra como mínimo en S9 (ocho semanas de plazo desde S0).');
+  if(c.operators===8&&c.rebalanceStart<4)errors.push('El reequilibrio entra como mínimo en S4 (tres semanas desde S0).');
+  if(c.shifts>=2&&c.shift2Start<3)errors.push('El segundo turno entra como mínimo en S3 (dos semanas de contratación).');
+  if(c.shifts>=3&&(c.shift3Start<3||c.shift3Start<c.shift2Start))errors.push('El tercer turno debe comenzar desde S3, después del segundo o en la misma semana.');
+  if(c.cells>0&&c.cellStart<6)errors.push('Las primeras células entran como mínimo en S6 (cinco semanas de plazo).');
+  if(c.automation&&c.automationStart<11)errors.push('El dispositivo entra como mínimo en S11 (diez semanas de plazo).');
+  if(c.outsource&&c.outsourceStart<5)errors.push('La subcontratación entra como mínimo en S5 (cuatro semanas de plazo).');
+  if(SCENARIOS.some(k=>!Number.isFinite(c.probabilities[k])||c.probabilities[k]<0||c.probabilities[k]>1)||Math.abs(sum(SCENARIOS.map(k=>c.probabilities[k]))-1)>1e-8)errors.push('Las probabilidades deben sumar 100%, con cada valor entre 0 y 100%.');
+  const investment=(c.lines-2)*48000+(c.operators===8?c.lines*9000:0)+c.cells*15000+(c.automation?c.lines*22000:0);
+  if(investment>C.investmentLimit)errors.push(`Inversión de USD ${investment.toLocaleString('en-US')}: supera USD 120,000 y requiere aprobación del consejo.`);
+  if(c.lines*120+c.cells*40>620)errors.push('La configuración supera 620 m² aun con la ampliación. Reduce líneas o células.');
+  return {errors,investment};
+}
+function assets(c) {
+  const list=[{id:'L1',type:'line',start:1,original:true},{id:'L2',type:'line',start:1,original:true}],orders=[];
+  const add=(week,cost,label)=>orders.push({week:Math.max(0,week),cost,label});
+  if(c.lines===3) {list.push({id:'L3',type:'line',start:c.lineStart});add(c.lineStart-9,48000,'Tercera línea');}
+  if(c.operators===8) {add(c.rebalanceStart-4,18000,'Reequilibrio de dos líneas');if(c.lines===3)add(Math.max(c.lineStart,c.rebalanceStart)-4,9000,'Reequilibrio de tercera línea');}
+  for(let i=0;i<c.cells;i++) {const start=c.cellStart+Math.floor(i/4);list.push({id:`C${i+1}`,type:'cell',start});add(start-6,15000,`Célula ${i+1}`);}
+  if(c.automation) {add(c.automationStart-11,44000,'Dispositivo de dos líneas');if(c.lines===3)add(Math.max(c.lineStart,c.automationStart)-11,22000,'Dispositivo de tercera línea');}
+  let leaseStart=null;
+  const pending=list.filter(x=>!x.original).sort((a,b)=>a.start-b.start||(a.type==='line'?-1:1));
+  let occupied=240;
+  for(let w=1;w<=52;w++)for(const item of pending.filter(x=>x.actualStart===undefined&&x.start<=w)) {
+    const a=item.type==='line'?120:40;
+    if(occupied+a>420&&w>=11&&leaseStart===null)leaseStart=w;
+    if(occupied+a<=420+(leaseStart!==null?200:0)) {item.actualStart=w;occupied+=a;}
+  }
+  const scheduled=list.map(x=>({...x,start:x.original?1:(x.actualStart??53)}));
+  const deliveredLines=scheduled.filter(x=>x.type==='line'&&x.start<=52).length;
+  const deliveredCells=scheduled.filter(x=>x.type==='cell'&&x.start<=52).length;
+  const residualBasis=(deliveredLines-2)*48000+deliveredCells*15000+
+    (c.operators===8?deliveredLines*9000:0)+(c.automation?deliveredLines*22000:0);
+  return {list:scheduled,orders,leaseStart,residualBasis};
+}
+function freshRoster() {
+  const r=[];
+  for(const [role,n] of [['operator',10],['test',2],['handler',1],['rework',1]])for(let i=0;i<n;i++)r.push({role,shift:1,hireWeek:0,original:true});
+  return r;
+}
+const learning=(worker,w)=>worker.original?1:C.learning[Math.min(4,Math.max(0,w-worker.hireWeek))];
+function staffRequired(lines,cells,c,w,shifts) {
+  const outsourced=c.outsource&&w>=c.outsourceStart;
+  const ops=outsourced?4:c.operators===8&&w>=c.rebalanceStart?7:5;
+  const handlers=Math.ceil(lines/3+cells/6-1e-9);
+  return Array.from({length:shifts},(_,s)=>({operator:lines*ops,test:lines,cell:cells*c.cellWorkers,
+    handler:Math.max(0,handlers-(s>0?1:0)),leader:s>0?1:0,rework:1}));
+}
+function updateRoster(roster,needs,w) {
+  const keep=[];
+  for(let s=1;s<=3;s++)for(const role of Object.keys(C.wages)) {
+    const current=roster.filter(x=>x.shift===s&&x.role===role).sort((a,b)=>a.hireWeek-b.hireWeek);
+    const original=current.filter(x=>x.original).length;
+    keep.push(...current.slice(0,Math.max(original,needs[s-1]?.[role]??0)));
+  }
+  let hired=0;
+  for(let s=1;s<=needs.length;s++)for(const role of ['leader','handler','rework','test','operator','cell']) {
+    const missing=Math.max(0,needs[s-1][role]-keep.filter(x=>x.shift===s&&x.role===role).length);
+    const n=Math.min(missing,12-hired);
+    for(let i=0;i<n;i++)keep.push({role,shift:s,hireWeek:w,original:false});
+    hired+=n;
+  }
+  return {roster:keep,hired,released:roster.length+hired-keep.length};
+}
+function resources(c,w,lineCount,cellCount,shifts,roster,p,saturday=false) {
+  const out=[],prodHours=shifts===3?7:7.5;
+  for(let s=1;s<=shifts;s++) {
+    const workers=role=>roster.filter(x=>x.shift===s&&x.role===role).sort((a,b)=>a.hireWeek-b.hireWeek);
+    const ops=workers('operator'),test=workers('test'),cw=workers('cell');
+    const support=workers('handler').length+workers('leader').length;
+    const y=s===1?1:s===2?c.yield2:c.yield3;
+    const T=prodHours*60*5*y+(saturday&&s===1?390:0);
+    const outsourced=c.outsource&&w>=c.outsourceStart;
+    const opConfig=outsourced?5:c.operators===8&&w>=c.rebalanceStart?8:6;
+    const nOps=opConfig-1;
+    let oi=0,load=0;
+    for(let l=0;l<lineCount;l++) {
+      if(ops.length-oi<nOps||test.length<=l||load+1/3>support+EPS)continue;
+      const crew=ops.slice(oi,oi+nOps);oi+=nOps;load+=1/3;
+      const learn=Math.min(avg(crew.map(x=>learning(x,w))),learning(test[l],w));
+      const r=routeMetrics(opConfig,c.automation&&w>=c.automationStart,outsourced,p,c.lot,c.setup);
+      out.push({id:`L${l+1}·T${s}`,type:'line',shift:s,operators:opConfig,learning:learn,T,route:r,
+        gross:T*learn/r.effectiveCycle,fail:[c.failStd,c.failPro],outsourced,crew:nOps+1});
+    }
+    let ci=0;
+    const content=routeMetrics().content;
+    for(let k=0;k<cellCount;k++) {
+      const crew=cw.slice(ci,ci+c.cellWorkers);ci+=crew.length;
+      if(!crew.length||load+1/6>support+EPS)continue;
+      load+=1/6;
+      const effectiveWorkers=sum(crew.map(x=>learning(x,w)));
+      const work=((1-p)*content[0]+p*content[1])*(1+c.cellPenalty);
+      out.push({id:`C${k+1}·T${s}`,type:'cell',shift:s,learning:avg(crew.map(x=>learning(x,w))),T,
+        gross:T/(work/effectiveWorkers+5/c.lot),fail:[Math.max(0,c.failStd-.01),Math.max(0,c.failPro-.01)],outsourced:false,crew:crew.length});
+    }
+  }
+  const externalGross=sum(out.filter(x=>x.outsourced).map(x=>x.gross));
+  if(externalGross>C.externalDoorLimit)for(const r of out.filter(x=>x.outsourced))r.gross*=C.externalDoorLimit/externalGross;
+  return out;
+}
+function reworkCapacity(c,w,shifts,roster,saturday) {
+  return sum(roster.filter(x=>x.role==='rework').map(x=>{
+    const y=x.shift===1?1:x.shift===2?c.yield2:c.yield3;
+    return ((shifts===3?7:7.5)*300*y+(saturday&&x.shift===1?390:0))*learning(x,w)/15;
+  }));
+}
+function laborCost(roster,shifts,saturday) {
+  const weekday=sum(roster.map(x=>C.wages[x.role]*(shifts===3?7.5:8)*5*(x.shift===1?1:x.shift===2?1.08:1.15)))*C.benefits;
+  const sat=saturday?sum(roster.filter(x=>x.shift===1).map(x=>C.wages[x.role]*7*1.5))*C.benefits:0;
+  return weekday+sat+C.supervisor;
+}
+function matureGood(c,w,lines,cells,n) {
+  const needs=staffRequired(lines,cells,c,w,n);
+  const roster=[];
+  needs.forEach((roles,i)=>Object.entries(roles).forEach(([role,qty])=>{for(let j=0;j<qty;j++)roster.push({role,shift:i+1,original:true,hireWeek:0});}));
+  const p=mixForWeek(c,w);
+  const rs=resources(c,w,lines,cells,n,roster,p);
+  const gross=sum(rs.map(r=>r.gross));
+  const failed=sum(rs.map(r=>r.gross*((1-p)*r.fail[0]+p*r.fail[1])));
+  return gross-failed+Math.min(failed*.8,reworkCapacity(c,w,n,roster,false));
+}
+function simulate(input={},scenario='base') {
+  const c=config(input),validation=validate(c);
+  if(!SCENARIOS.includes(scenario))validation.errors.push('Escenario desconocido.');
+  if(validation.errors.length)return {valid:false,config:c,errors:validation.errors,rows:[]};
+  const plan=assets(c),rows=[],events=[],monthlySats={},backlog=[[],[]];
+  let roster=freshRoster(),inv=[...C.stockInitial],rwQueue=[0,0],phaseTarget=c.shifts,pendingShift=null;
+  let npv=-sum(plan.orders.filter(x=>x.week===0).map(x=>x.cost));
+  let lostOpportunity=0,totalCapex=sum(plan.orders.map(x=>x.cost));
+  const totals={demand:0,sales:0,onTime:0,late:0,lost:0,produced:0,gross:0,scrap:0,reworked:0,
+    revenue:0,materials:0,labor:0,cost:0,operatingCash:0,hireCost:0,hired:0,saturdays:0,rent:0,
+    soldSKU:[0,0],lostSKU:[0,0],goodSKU:[0,0],grossSKU:[0,0],scrapSKU:[0,0]};
+  for(let w=1;w<=52;w++) {
+    const p=mixForWeek(c,w),d=DEMAND[scenario][w-1],dsku=[d*(1-p),d*p];
+    const active=plan.list.filter(x=>x.start<=w),lines=active.filter(x=>x.type==='line').length,cells=active.length-lines;
+    if(pendingShift&&w>=pendingShift.start){phaseTarget=pendingShift.count;pendingShift=null;}
+    if(c.sequential&&w>=13&&(w-13)%4===0) {
+      const observed=avg(rows.slice(-4).map(x=>x.demand));
+      const cap1=matureGood(c,w,lines,cells,1),cap2=matureGood(c,w,lines,cells,2);
+      const selected=Math.min(c.shifts,observed<=.95*cap1?1:observed<=.95*cap2?2:3);
+      if(selected>phaseTarget){pendingShift={count:selected,start:w+2};events.push({week:w,text:`Promedio observado ${observed.toFixed(0)} u: solicitar ${selected} turnos desde S${w+2}.`});}
+      else {phaseTarget=selected;pendingShift=null;events.push({week:w,text:`Promedio observado ${observed.toFixed(0)} u: operar ${selected} turno(s).`});}
+    }
+    let shifts=1;
+    if(c.shifts>=2&&w>=c.shift2Start)shifts=2;
+    if(c.shifts>=3&&w>=c.shift3Start)shifts=3;
+    if(c.sequential&&w>=13)shifts=Math.min(shifts,phaseTarget);
+    const needs=staffRequired(lines,cells,c,w,shifts),staff=updateRoster(roster,needs,w);roster=staff.roster;
+    const beginningInv=[...inv],pendingBefore=backlog.map(q=>sum(q.map(x=>x.qty))),needed=dsku.map((x,k)=>x+pendingBefore[k]);
+    let target=dsku.map((_,k)=>Math.max(0,needed[k]+c.buffer*(k===0?1-p:p)-inv[k]));
+    const excess=Math.max(0,sum(target)+sum(inv)-sum(needed)-C.maxFG);
+    if(excess>0){const ratio=Math.max(0,(sum(target)-excess)/sum(target));target=target.map(x=>x*ratio);}
+    const dayResources=resources(c,w,lines,cells,shifts,roster,p,false);
+    const dayGood=sum(dayResources.map(r=>r.gross*(1-((1-p)*r.fail[0]+p*r.fail[1])*.2)));
+    const satResources=resources(c,w,lines,cells,shifts,roster,p,true);
+    const satGood=sum(satResources.map(r=>r.gross*(1-((1-p)*r.fail[0]+p*r.fail[1])*.2)));
+    const month=dateForWeek(w,5).slice(0,7);
+    const saturday=c.saturdays>0&&dateForWeek(w,5)<=C.end&&(monthlySats[month]??0)<c.saturdays&&sum(target)-sum(rwQueue)>dayGood+EPS&&satGood>dayGood+EPS;
+    if(saturday){monthlySats[month]=(monthlySats[month]??0)+1;totals.saturdays++;}
+    const rwCap=reworkCapacity(c,w,shifts,roster,saturday);
+    const queuedRepair=Math.min(sum(rwQueue),rwCap);
+    const repairRatio=sum(rwQueue)>0?queuedRepair/sum(rwQueue):0;
+    target=target.map((x,k)=>Math.max(0,x-rwQueue[k]*repairRatio));
+    let prodMix=p,rs=[],goodRates=[1,1],grossWanted=0;
+    for(let it=0;it<4;it++) {
+      rs=resources(c,w,lines,cells,shifts,roster,prodMix,saturday);
+      const cap=sum(rs.map(r=>r.gross));
+      goodRates=[0,1].map(k=>cap?sum(rs.map(r=>r.gross*(1-r.fail[k]*.2)))/cap:1);
+      const grossTarget=target.map((x,k)=>x/goodRates[k]);grossWanted=sum(grossTarget);
+      if(grossWanted>EPS)prodMix=grossTarget[1]/grossWanted;
+    }
+    rs=resources(c,w,lines,cells,shifts,roster,prodMix,saturday);
+    const grossCapActualMix=sum(rs.map(r=>r.gross)),fraction=grossCapActualMix>0?Math.min(1,grossWanted/grossCapActualMix):0;
+    const grossSKU=[0,0],firstPass=[0,0],scrapSKU=[0,0],recoverable=[0,0];
+    for(const r of rs) {
+      r.produced=r.gross*fraction;
+      for(let k=0;k<2;k++) {
+        const q=r.produced*(k===0?1-prodMix:prodMix);
+        grossSKU[k]+=q;firstPass[k]+=q*(1-r.fail[k]);scrapSKU[k]+=q*r.fail[k]*.2;recoverable[k]+=q*r.fail[k]*.8;
+      }
+    }
+    const oldRepaired=rwQueue.map(x=>x*repairRatio);
+    const newRepairRatio=sum(recoverable)>0?Math.min(1,(rwCap-sum(oldRepaired))/sum(recoverable)):0;
+    const repaired=oldRepaired.map((x,k)=>x+recoverable[k]*newRepairRatio),rwDone=sum(repaired);
+    rwQueue=rwQueue.map((x,k)=>Math.max(0,x+recoverable[k]-repaired[k]));
+    const goodSKU=firstPass.map((x,k)=>x+repaired[k]);
+    const salesSKU=[0,0],lostSKU=[0,0],lateSKU=[0,0],onSKU=[0,0];
+    for(let k=0;k<2;k++) {
+      let stock=inv[k]+goodSKU[k];
+      for(const q of backlog[k]){const served=Math.min(stock,q.qty);q.qty-=served;stock-=served;salesSKU[k]+=served;lateSKU[k]+=served;}
+      const current=Math.min(stock,dsku[k]);onSKU[k]=current;salesSKU[k]+=current;stock-=current;
+      const unmet=dsku[k]-current;lostSKU[k]+=unmet*.5;
+      backlog[k].push({born:w,qty:unmet*.5});
+      for(const q of backlog[k])if(w-q.born>=2){lostSKU[k]+=q.qty;q.qty=0;}
+      backlog[k]=backlog[k].filter(x=>x.qty>EPS);
+      inv[k]=Math.max(0,stock);
+    }
+    const pending=backlog.map(q=>sum(q.map(x=>x.qty))),sales=sum(salesSKU),lost=sum(lostSKU),good=sum(goodSKU),gross=sum(grossSKU);
+    const wage=laborCost(roster,shifts,saturday),hireCost=staff.hired*C.hireCost;
+    const materials=sum(grossSKU.map((x,k)=>x*C.material[k]));
+    const outsourceCost=sum(rs.filter(r=>r.outsourced).map(r=>r.produced))*C.externalDoorCost;
+    const carry=sum(inv.map((x,k)=>(x+beginningInv[k])/2*C.material[k]*C.carryAnnual/52));
+    const backlogCost=sum(pending)*3,imageCost=lost*10,warranty=sales*C.warrantyRate*C.warrantyCost;
+    const rent=plan.leaseStart!==null&&w>=plan.leaseStart?200*6:0;
+    const leaseLiability=w===52&&plan.leaseStart!==null?Math.max(0,C.leaseMin-(53-plan.leaseStart))*200*6:0;
+    const fixed=C.fixed+(shifts-1)*C.shiftFixed;
+    const revenue=sum(salesSKU.map((x,k)=>x*C.price[k]));
+    const cost=materials+outsourceCost+wage+hireCost+carry+backlogCost+imageCost+warranty+rent+fixed+leaseLiability;
+    const operatingCash=revenue-cost;
+    const capex=sum(plan.orders.filter(x=>x.week===w).map(x=>x.cost));
+    const priorCapex=sum(plan.orders.filter(x=>x.week<=w).map(x=>x.cost));
+    npv+=discount(operatingCash-capex,w);
+    lostOpportunity+=sum(lostSKU.map((x,k)=>x*(C.margin[k]+10)));
+    const nominal=resources(c,w,lines,cells,shifts,roster,p,saturday);
+    const nominalGross=sum(nominal.map(x=>x.gross));
+    const nominalFailures=sum(nominal.map(r=>r.gross*((1-p)*r.fail[0]+p*r.fail[1])));
+    const nominalGood=nominalGross-nominalFailures+Math.min(nominalFailures*.8,Math.max(0,rwCap-queuedRepair));
+    const row={week:w,date:dateForWeek(w),demand:d,mix:p,productionMix:prodMix,lines,cells,shifts,saturday,
+      capacityGross:nominalGross,capacityGood:nominalGood,gross,good,scrap:sum(scrapSKU),reworked:rwDone,reworkPending:sum(rwQueue),
+      sales,onTime:sum(onSKU),late:sum(lateSKU),lost,pending:sum(pending),inventory:sum(inv),inventorySKU:[...inv],pendingSKU:pending,
+      service:sum(onSKU)/d,fulfilment:sales/d,stockUse:grossCapActualMix?gross/grossCapActualMix:0,
+      staff:roster.length+1,hired:staff.hired,released:staff.released,learning:rs.length?avg(rs.map(x=>x.learning)):0,
+      labor:wage,laborPerGood:good>EPS?wage/good:null,revenue,materials,outsourceCost,carry,backlogCost,imageCost,warranty,rent,fixed,hireCost,leaseLiability,
+      cost,operatingCash,capex,investment:priorCapex,cumulativeNpv:npv,
+      area:lines*120+cells*40,areaAvailable:420+(plan.leaseStart!==null&&w>=plan.leaseStart?200:0),
+      contribution:sum(salesSKU.map((x,k)=>x*C.margin[k])),outsourcedUnits:sum(rs.filter(r=>r.outsourced).map(r=>r.produced)),
+      resources:rs,goodSKU,grossSKU,salesSKU,lostSKU,scrapSKU,observedWip:lines*c.wip};
+    rows.push(row);
+    for(const key of ['demand','sales','onTime','late','lost','gross','scrap','revenue','materials','labor','cost','operatingCash','hireCost','rent'])totals[key]+=row[key];
+    totals.produced+=good;totals.reworked+=rwDone;totals.hired+=staff.hired;
+    for(let k=0;k<2;k++){totals.soldSKU[k]+=salesSKU[k];totals.lostSKU[k]+=lostSKU[k];totals.goodSKU[k]+=goodSKU[k];totals.grossSKU[k]+=grossSKU[k];totals.scrapSKU[k]+=scrapSKU[k];}
+  }
+  const residual=plan.residualBasis*.8;npv+=discount(residual,52);
+  const endingPending=sum(backlog.map(q=>sum(q.map(x=>x.qty))));
+  return {valid:true,config:c,scenario,rows,events,orders:plan.orders,leaseStart:plan.leaseStart,
+    summary:{...totals,npv,investment:totalCapex,residual,service:totals.onTime/totals.demand,
+      fulfilment:totals.sales/totals.demand,endingPending,endingStock:sum(inv),endingStockSKU:inv,
+      endingRework:sum(rwQueue),endingReworkSKU:rwQueue,lostOpportunity,peakStaff:Math.max(...rows.map(x=>x.staff)),
+      peakArea:Math.max(...rows.map(x=>x.area)),maxWeeklyHires:Math.max(...rows.map(x=>x.hired)),
+      laborPerGood:totals.labor/totals.produced,monthlySats}};
+}
+function evaluate(changes={}) {
+  const c=config(changes),runs=Object.fromEntries(SCENARIOS.map(s=>[s,simulate(c,s)]));
+  if(SCENARIOS.some(s=>!runs[s].valid))return {valid:false,errors:runs.base.errors,runs,config:c};
+  return {valid:true,config:c,runs,expected:sum(SCENARIOS.map(s=>c.probabilities[s]*runs[s].summary.npv)),
+    worst:Math.min(...SCENARIOS.map(s=>runs[s].summary.npv)),expectedSales:sum(SCENARIOS.map(s=>c.probabilities[s]*runs[s].summary.sales)),
+    expectedService:sum(SCENARIOS.map(s=>c.probabilities[s]*runs[s].summary.service))};
+}
+function compare(overrides={}) {
+  return STRATEGIES.map(s=>({...s,...evaluate({...s.changes,...overrides})}));
+}
+function sensitivity(input={}) {
+  const c=config(input),central=evaluate(c);
+  if(!central.valid)return {valid:false,errors:central.errors};
+  const axes=[
+    {label:'Mezcla Pro',low:'20% / 25%',high:'45% / 50%',a:{proFirst:.2,proSecond:.25},b:{proFirst:.45,proSecond:.5}},
+    {label:'Lote por variante',low:'25 u',high:'400 u',a:{lot:25},b:{lot:400}},
+    {label:'Cambio de variante',low:'5 min',high:'40 min',a:{setup:5},b:{setup:40}},
+    {label:'Polivalencia de células',low:'0%',high:'20%',a:{cellPenalty:0},b:{cellPenalty:.2}},
+    {label:'Fallas de prueba',low:'3% / 5%',high:'5% / 7%',a:{failStd:.03,failPro:.05},b:{failStd:.05,failPro:.07}},
+    {label:'Rendimiento turnos 2 / 3',low:'85% / 80%',high:'100% / 95%',a:{yield2:.85,yield3:.80},b:{yield2:1,yield3:.95}},
+    {label:'Colchón de terminado',low:'0 u',high:'1.200 u',a:{buffer:0},b:{buffer:1200}},
+  ];
+  return {valid:true,central:central.expected,axes:axes.map(x=>({...x,lowValue:evaluate({...c,...x.a}).expected,highValue:evaluate({...c,...x.b}).expected})).sort((a,b)=>Math.abs(b.highValue-b.lowValue)-Math.abs(a.highValue-a.lowValue))};
+}
+function probabilityThreshold(first,second) {
+  const diff=s=>first.runs[s].summary.npv-second.runs[s].summary.npv;
+  const other=(2*diff('base')+diff('optimista'))/3;
+  const denominator=other-diff('canal');
+  const q=denominator!==0?other/denominator:null;
+  return q!==null&&q>=0&&q<=1?q:null;
+}
+
+
+
+const $=s=>document.querySelector(s);
+const number=(x,d=0)=>Number.isFinite(x)?new Intl.NumberFormat('es-DO',{maximumFractionDigits:d,minimumFractionDigits:d}).format(x):'—';
+const money=(x,d=0)=>`USD ${number(x,d)}`;
+const compactMoney=x=>`USD ${number(x/1e6,2)} M`;
+const percent=(x,d=1)=>`${number(x*100,d)}%`;
+const esc=x=>String(x).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+const dateText=x=>new Intl.DateTimeFormat('es-DO',{day:'2-digit',month:'short',timeZone:'UTC'}).format(new Date(`${x}T12:00:00Z`));
+const form=$('#plan-form'),selectPreset=$('#preset');
+const sharedKeys=['probabilities','proFirst','proSecond','cellPenalty','failStd','failPro','yield2','yield3','setup','wip'];
+const state={tab:'plant',week:8,variant:'mix',scenario:'base',preset:'fases',cfg:config(STRATEGIES.find(x=>x.id==='fases').changes),evaluation:null,comparison:[],dirty:false,invalid:null,tableOpen:false,costOpen:false};
+const shared=c=>Object.fromEntries(sharedKeys.map(k=>[k,c[k]]));
+const field=k=>form.elements.namedItem(k);
+const metric=(label,value,note='',cls='')=>`<div class="metric"><dt>${label}</dt><dd class="${cls}">${value}</dd><small>${note}</small></div>`;
+const ledger=entries=>`<dl class="ledger">${entries.join('')}</dl>`;
+const intro=(index,title,description,tag)=>`<div class="page-intro"><div><h1>${title}</h1><p>${description}</p></div>${tag?`<span class="period-tag">${tag}</span>`:''}</div>`;
+const weekPicker=()=>`<div class="week-picker"><label for="week-range">Semana de análisis<span>${dateText(dateForWeek(state.week))}${state.week===8?' · Black Friday':state.week===33||state.week===34?' · Día de las Madres':''}</span></label><input id="week-range" type="range" min="1" max="52" step="1" value="${state.week}"><output for="week-range">S${state.week}</output></div>`;
+const currentRun=()=>state.evaluation.runs[state.scenario];
+const currentRow=()=>currentRun().rows[state.week-1];
+
+selectPreset.innerHTML=STRATEGIES.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')+'<option value="custom">Plan de trabajo</option>';
+function fillForm(c) {
+  for(const k of Object.keys(DEFAULTS)) {
+    const el=field(k);if(!el||k==='probabilities')continue;
+    if(el.type==='checkbox')el.checked=Boolean(c[k]);
+    else el.value=['proFirst','proSecond','cellPenalty','failStd','failPro','yield2','yield3'].includes(k)?Number((c[k]*100).toFixed(4)):c[k];
+  }
+  field('probBase').value=numberInput(c.probabilities.base*100);
+  field('probOptimistic').value=numberInput(c.probabilities.optimista*100);
+  field('probChannel').value=numberInput(c.probabilities.canal*100);
+  selectPreset.value=state.preset;field('scenario').value=state.scenario;
+  $('#preset-description').textContent=state.preset==='custom'?'Plan ajustado con los campos de este panel.':`${c.lines} líneas · ${c.operators} personas por línea · ${c.sequential?'turnos por fases':`${c.shifts} turno(s)`}`;
+  syncApplicability();
+}
+function numberInput(n){return Number(n.toFixed(8));}
+function syncApplicability() {
+  const active={lineStart:Number(field('lines').value)===3,rebalanceStart:Number(field('operators').value)===8,
+    shift2Start:Number(field('shifts').value)>=2,shift3Start:Number(field('shifts').value)>=3,
+    cellStart:Number(field('cells').value)>0,cellWorkers:Number(field('cells').value)>0,cellPenalty:Number(field('cells').value)>0,
+    automationStart:field('automation').checked,outsourceStart:field('outsource').checked};
+  for(const [key,enabled] of Object.entries(active)){field(key).disabled=!enabled;$(`[data-for="${key}"]`).hidden=!enabled;}
+  for(const row of form.querySelectorAll('.field-pair'))row.hidden=[...row.children].every(x=>x.hidden);
+}
+function syncPending() {
+  $('#pending-notice').hidden=!state.dirty||Boolean(state.invalid);
+  $('#download-csv').disabled=state.dirty||Boolean(state.invalid);
+}
+function readForm() {
+  const c=config();
+  for(const k of Object.keys(DEFAULTS)) {
+    const el=field(k);if(!el||k==='probabilities')continue;
+    if(el.disabled){c[k]=state.cfg[k];continue;}
+    c[k]=el.type==='checkbox'?el.checked:el.value===''?NaN:Number(el.value);
+    if(['proFirst','proSecond','cellPenalty','failStd','failPro','yield2','yield3'].includes(k))c[k]/=100;
+  }
+  const probability=k=>field(k).value===''?NaN:Number(field(k).value)/100;
+  c.probabilities={base:probability('probBase'),optimista:probability('probOptimistic'),canal:probability('probChannel')};
+  return c;
+}
+function errorFields(message) {
+  if(message.includes('probabilidades'))return ['probBase','probOptimistic','probChannel'];
+  if(message.includes('tercera línea'))return ['lineStart'];
+  if(message.includes('reequilibrio'))return ['rebalanceStart'];
+  if(message.includes('segundo turno'))return ['shift2Start'];
+  if(message.includes('tercer turno'))return ['shift3Start','shift2Start'];
+  if(message.includes('primeras células'))return ['cellStart'];
+  if(message.includes('dispositivo entra'))return ['automationStart'];
+  if(message.includes('subcontratación entra'))return ['outsourceStart'];
+  if(message.includes('Subcontratación con dispositivo')||message.includes('subcontratación con dispositivo'))return ['outsource','automation'];
+  if(message.includes('Cinco personas')||message.includes('Al subcontratar'))return ['operators','outsource'];
+  if(message.includes('Inversión'))return Number(field('cells').value)>0?['cells','automation','lines','operators']:['automation','lines','operators'];
+  if(message.includes('620 m²'))return ['cells','lines'];
+  const key=message.split(':')[0];return field(key)?[key]:[];
+}
+const fieldLabel=key=>{
+  const label=field(key)?.labels?.[0];
+  return [...(label?.childNodes??[])].filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).filter(Boolean).join(' ')||key;
+};
+function showErrors(errors) {
+  for(const el of form.querySelectorAll('[aria-invalid]')){el.removeAttribute('aria-invalid');el.removeAttribute('aria-describedby');}
+  for(const el of form.querySelectorAll('.field-error'))el.remove();
+  const box=$('#form-errors');box.hidden=!errors.length;
+  box.innerHTML=errors.map((message,i)=>{
+    const names=errorFields(message),primary=names[0];
+    const friendly=message.replace(/^(\w+):/,key=>primary?`${fieldLabel(primary)}:`:key);
+    if(primary){
+      const id=`field-error-${i}`;
+      const group=field(primary).closest('.probabilities')||field(primary).closest('.field-pair')||field(primary).closest('label');
+      group.insertAdjacentHTML('afterend',`<span class="field-error" id="${id}">${esc(friendly)}</span>`);
+      for(const key of names){field(key).setAttribute('aria-invalid','true');field(key).setAttribute('aria-describedby',id);}
+    }
+    return `<p>${esc(friendly)}${primary?` <a href="#${field(primary).id}" data-focus-field="${primary}">Revisar ${esc(fieldLabel(primary))}</a>`:''}</p>`;
+  }).join('');
+  if(errors.length){$('#control-panel').open=true;box.focus();}
+}
+function calculate(c) {
+  const result=evaluate(c);state.dirty=false;
+  if(!result.valid){state.invalid=result.errors;state.dirty=true;render();showErrors(result.errors);$('#form-status').textContent='Plan sin calcular. Corrige los campos indicados.';return false;}
+  state.invalid=null;showErrors([]);state.cfg=c;state.evaluation=result;state.comparison=compare(shared(c));
+  $('#form-status').textContent='Plan calculado en los tres escenarios.';
+  const presetConfig=config(STRATEGIES.find(x=>x.id===state.preset)?.changes);
+  const decisionKeys=Object.keys(DEFAULTS).filter(k=>!sharedKeys.includes(k));
+  if(state.preset!=='custom'&&decisionKeys.some(k=>c[k]!==presetConfig[k])){state.preset='custom';selectPreset.value='custom';$('#preset-description').textContent='Tus ajustes se comparan con las seis políticas guardadas.';}
+  render();return true;
+}
+function loadPreset(id,reset=false) {
+  const s=STRATEGIES.find(x=>x.id===id);if(!s)return;
+  const current=state.dirty?readForm():state.cfg;
+  state.preset=id;const next=config({...s.changes,...(reset?{}:shared(current))});
+  fillForm(next);calculate(next);
+}
+function renderPlant() {
+  const row=currentRow(),c=state.cfg,one=row.resources.find(r=>r.type==='line');
+  const ops=one?.operators??(c.outsource&&state.week>=c.outsourceStart?5:c.operators===8&&state.week>=c.rebalanceStart?8:6);
+  const r=routeMetrics(ops,c.automation&&state.week>=c.automationStart,c.outsource&&state.week>=c.outsourceStart,row.mix,c.lot,c.setup);
+  const fullCycle=state.variant==='std'?r.cycle[0]:state.variant==='pro'?r.cycle[1]:r.mixedCycle;
+  const amounts=state.variant==='std'?r.std:state.variant==='pro'?r.pro:r.std.map((x,i)=>x*(1-row.mix)+r.pro[i]*row.mix);
+  const critical=state.variant==='std'?r.bottleneck[0]:state.variant==='pro'?r.bottleneck[1]:`${r.bottleneck[0]}/${r.bottleneck[1]}`;
+  const gap=row.capacityGood-row.demand;
+  return intro('01 / Capacidad y flujo','Capacidad de la planta','Revisa el ciclo, la ocupación de las estaciones y el cuello de botella de cada variante.',`${LABELS[state.scenario]} · S${state.week}`)+
+    ledger([metric('Capacidad buena',number(row.capacityGood,1),'unidades disponibles esta semana','positive'),metric('Demanda',number(row.demand),'unidades solicitadas'),metric('Capacidad menos demanda',`${gap>=0?'+':''}${number(gap)}`,'sin sumar inventario ni pendientes',gap<0?'warning':''),metric('Entregas a tiempo',percent(row.service),'porcentaje de pedidos de la semana')])+weekPicker()+
+    `<div class="section-head"><div><h2>Estaciones y cuello de botella</h2><p>${ops} personas · ${number(row.mix*100)}% Pro · ${row.shifts} turno(s) programado(s)</p></div><div class="tabs" aria-label="Utilización por variante"><button type="button" data-variant="std" aria-pressed="${state.variant==='std'}">Estándar</button><button type="button" data-variant="pro" aria-pressed="${state.variant==='pro'}">Pro</button><button type="button" data-variant="mix" aria-pressed="${state.variant==='mix'}">Mezcla</button></div></div>`+
+    `<div class="line-summary"><div><h3>Ciclo Estándar</h3><strong>${number(r.cycle[0],2)} min</strong><p>Cuello: ${r.bottleneck[0]}</p></div><div><h3>Ciclo Pro</h3><strong>${number(r.cycle[1],2)} min</strong><p>Cuello: ${r.bottleneck[1]}</p></div><div><h3>Ciclo de la mezcla</h3><strong>${number(r.mixedCycle,2)} min</strong><p>+ ${number(c.setup/c.lot,3)} min/u por cambios</p></div></div>`+
+    `<table class="station-table"><thead><tr><th scope="col">Estación</th><th scope="col">Std, min</th><th scope="col">Pro, min</th><th scope="col">Ocupación ${state.variant==='std'?'Std':state.variant==='pro'?'Pro':'mezcla'}</th></tr></thead><tbody>${r.ids.map((id,i)=>{
+      const utilization=amounts[i]/(state.variant==='mix'?r.effectiveCycle:fullCycle);
+      return `<tr${critical.split('/').includes(id)?' class="bottleneck"':''}><th scope="row"><span class="station-id">${id}</span><span class="station-op">${r.names[i]}</span></th><td>${number(r.std[i],2)}</td><td>${number(r.pro[i],2)}</td><td><div class="bar-wrap"><span class="bar-track" aria-hidden="true"><span style="width:${utilization*100}%"></span></span><output>${percent(utilization,0)}</output></div></td></tr>`;
+    }).join('')}</tbody></table><p class="table-note">Ocupación a capacidad madura. En la mezcla se incluyen cambios prorrateados; el cuello puede alternar entre variantes. Uso real de los recursos esta semana: <strong>${percent(row.stockUse)}</strong>. El color señala las estaciones que limitan alguna variante.</p>`+
+    `<div class="facts"><div><p>Balance Estándar / Pro</p><strong>${percent(r.efficiency[0])} / ${percent(r.efficiency[1])}</strong></div><div><p>Takt por línea¹</p><strong>${number((row.shifts===3?2100:2250)*row.lines/row.demand,2)} min</strong></div><div><p>Contenido Std / Pro</p><strong>${number(r.content[0],2)} / ${number(r.content[1],2)} min</strong></div><div><p>WIP de referencia por línea²</p><strong>${number(c.wip)} u</strong></div><div><p>Flujo con ese WIP, ritmo maduro²</p><strong>${number(c.wip*r.effectiveCycle/60,2)} h</strong></div><div><p>Mano de obra / unidad buena</p><strong>${money(row.laborPerGood,2)}</strong></div></div>`+
+    `<p class="table-note">¹ Primer turno; reparte toda la demanda entre las líneas, antes de la aportación de células. ² El dato observado es 46 u en la línea actual; mantenerlo en otra configuración es un supuesto editable, no una predicción de colas.</p>`+
+    `<div class="insight"><p><strong>La propuesta de ocho personas no duplica la capacidad.</strong> Con el lote original de 100 y 30% Pro, el ciclo es 5,98 min y las dos líneas pasan de 537,0 a 728,2 u brutas por semana: +35,6%. El promedio de 5,0 min del informe no representa el cuello.</p></div>`+
+    `<div class="two-notes"><div><h3>Efecto del dispositivo de puerta</h3><p>En seis estaciones, el ciclo Pro sigue en 8,60 min (E4). Con 30% Pro y lote 100, la capacidad aumenta 9,1%. En ocho estaciones, aumenta 1,5%.</p></div><div><h3>Personal y espacio de esta semana</h3><p>${row.staff} personas con el supervisor; ${row.hired} incorporaciones. Aprendizaje medio: ${percent(row.learning)}. Superficie ocupada: ${row.area} de ${row.areaAvailable} m².</p></div></div>`+
+    `<details class="plain-details"><summary>Equipos que sí operan en S${state.week}</summary><div class="table-scroll"><table class="data-table"><thead><tr><th>Equipo</th><th>Personas</th><th>Aprendizaje</th><th>Cap. bruta¹</th><th>Producción</th></tr></thead><tbody>${row.resources.map(x=>`<tr><th scope="row">${x.id}</th><td>${x.crew}</td><td>${percent(x.learning)}</td><td>${number(x.gross,1)}</td><td>${number(x.produced,1)}</td></tr>`).join('')}</tbody></table></div><p class="table-note">¹ Según la mezcla realmente programada (${percent(row.productionMix)} Pro); puede diferir de la mezcla de demanda por los pendientes y el inventario de cada variante.</p></details>`;
+}
+function productionChart(rows) {
+  const chartWidth=Math.max(360,Math.min(1000,$('#results').clientWidth-34)),small=chartWidth<600;
+  const W=chartWidth,H=small?265:325,left=small?43:49,right=small?12:18,top=25,bottom=38,max=Math.ceil(Math.max(...rows.map(r=>Math.max(r.demand,r.capacityGood)))/500)*500;
+  const X=w=>left+(w-1)*(W-left-right)/51,Y=n=>H-bottom-n/max*(H-top-bottom);
+  const line=k=>rows.map((r,i)=>`${i?'L':'M'}${X(r.week).toFixed(1)},${Y(r[k]).toFixed(1)}`).join(' ');
+  return `<div class="chart-box"><div class="legend"><span><i class="demand"></i>Demanda</span><span><i class="capacity"></i>Capacidad buena</span><span><i class="production"></i>Producción buena</span><span><i class="selection"></i>Semana elegida</span></div><div class="chart-scroll" role="region" aria-label="Capacidad y demanda de las 52 semanas"><svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="chart-title chart-description"><title id="chart-title">Capacidad, demanda y producción buena por semana</title><desc id="chart-description">Las cifras exactas están en la tabla de las 52 semanas. La capacidad es disponible; la producción responde a pedidos, pendientes y colchón.</desc>${[0,.25,.5,.75,1].map(q=>`<line x1="${left}" y1="${Y(q*max)}" x2="${W-right}" y2="${Y(q*max)}" stroke="#d9ded7"/><text x="${left-8}" y="${Y(q*max)+4}" text-anchor="end">${number(q*max)}</text>`).join('')}<text x="${left}" y="14">u/semana</text>${(small?[1,13,26,39,52]:[1,8,13,26,33,39,52]).map(w=>`<text x="${X(w)}" y="${H-12}" text-anchor="middle">S${w}</text>`).join('')}<line x1="${X(state.week)}" y1="${top}" x2="${X(state.week)}" y2="${H-bottom}" stroke="#a58737" stroke-dasharray="4 4"/><path d="${line('demand')}" fill="none" stroke="#a34426" stroke-width="2.6"/><path d="${line('capacityGood')}" fill="none" stroke="#18625a" stroke-width="2.8"/><path d="${line('good')}" fill="none" stroke="#182f3a" stroke-width="2" stroke-dasharray="3 3"/>${rows.filter(r=>r.week===state.week).map(r=>`<circle cx="${X(r.week)}" cy="${Y(r.demand)}" r="4" fill="#a34426"/><circle cx="${X(r.week)}" cy="${Y(r.capacityGood)}" r="4" fill="#18625a"/>`).join('')}</svg></div></div>`;
+}
+function renderWeeks() {
+  const run=currentRun(),r=currentRow(),s=run.summary;
+  return intro('02 / Producción y servicio','Producción y demanda','Compara el año completo y elige una semana para ver entregas, inventario y costos.',LABELS[state.scenario])+
+    ledger([metric('Pedidos entregados',number(s.sales),'de '+number(s.demand)+' solicitados'),metric('Servicio a tiempo',percent(s.service),'entregados en su semana de pedido','positive'),metric('Ventas perdidas',number(s.lost,1),'incluye vencimientos de pendientes','warning'),metric('VPN a 52 semanas',compactMoney(s.npv),'resultado de caja, inversión y residual')])+
+    productionChart(run.rows)+`<p class="scroll-hint">El selector muestra el detalle de cada semana. La tabla completa está disponible abajo.</p>`+weekPicker()+
+    `<div class="section-head"><div><h2>Qué ocurrió en S${r.week}</h2><p>${dateText(r.date)} · ${r.shifts} turno(s) · ${r.saturday?'con sábado':'sin sábado'} · ${r.staff} personas</p></div></div>`+
+    `<div class="line-summary"><div><h3>Producto terminado</h3><strong>${number(r.inventory,1)} u</strong><p>Std ${number(r.inventorySKU[0],1)} · Pro ${number(r.inventorySKU[1],1)}</p></div><div><h3>Pedidos que esperan</h3><strong>${number(r.pending,1)} u</strong><p>Std ${number(r.pendingSKU[0],1)} · Pro ${number(r.pendingSKU[1],1)}</p></div><div><h3>Buenas producidas</h3><strong>${number(r.good,1)} u</strong><p>Retrabajadas ${number(r.reworked,1)} · desecho ${number(r.scrap,1)}</p></div></div>`+
+    `<p class="week-cost">Costo de S${r.week}: <strong>${money(r.cost)}</strong> · Mano de obra por unidad buena: <strong>${money(r.laborPerGood,2)}</strong></p><details class="plain-details" id="week-costs" ${state.costOpen?'open':''}><summary>Costos y calidad de S${r.week}</summary><dl class="detail-list">${[
+      ['Ventas / a tiempo / atrasadas',`${number(r.sales,1)} / ${number(r.onTime,1)} / ${number(r.late,1)} u`],['Ventas perdidas esta semana',`${number(r.lost,1)} u`],
+      ['Capacidad bruta / buena',`${number(r.capacityGross,1)} / ${number(r.capacityGood,1)} u`],['Ingresos por ventas',money(r.revenue)],['Materiales de lo producido',money(r.materials)],['Mano de obra, con supervisor',money(r.labor)],
+      ['Fijos, turnos y alquiler',money(r.fixed+r.rent)],['Formación de personal',money(r.hireCost)],['Garantía y costo de inventario',money(r.warranty+r.carry)],['Pendientes y pérdida de imagen',money(r.backlogCost+r.imageCost)],
+      ['Puerta subcontratada',money(r.outsourceCost)],['Costo operativo total',money(r.cost)],['Contribución de ventas antes de MO',money(r.contribution)],['Flujo operativo de caja',money(r.operatingCash)],
+      ['Inversión acumulada',money(r.investment)],['Retrabajo que queda en proceso',`${number(r.reworkPending,1)} u`],
+    ].map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl></details>`+
+    `<details class="plain-details" id="week-table" ${state.tableOpen?'open':''}><summary>Tabla de las 52 semanas</summary><p class="scroll-hint">Desplaza la tabla para ver todas las columnas. El CSV incluye los tres escenarios.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Resultados de las 52 semanas"><table class="data-table"><thead><tr><th scope="col">Semana</th><th scope="col">Demanda</th><th scope="col">Cap. buena</th><th scope="col">Producido</th><th scope="col">Entregado</th><th scope="col">A tiempo</th><th scope="col">Perdido</th><th scope="col">Pendiente</th><th scope="col">Stock</th><th scope="col">Costo, USD</th></tr></thead><tbody>${run.rows.map(x=>`<tr class="${x.week===state.week?'selected':''}"><th scope="row"><button type="button" class="text-button" data-week="${x.week}">S${x.week} · ${dateText(x.date)}</button></th><td>${number(x.demand)}</td><td>${number(x.capacityGood,1)}</td><td>${number(x.good,1)}</td><td>${number(x.sales,1)}</td><td>${percent(x.service)}</td><td>${number(x.lost,1)}</td><td>${number(x.pending,1)}</td><td>${number(x.inventory,1)}</td><td>${number(x.cost)}</td></tr>`).join('')}</tbody></table></div></details>`+
+    `<p class="source-note">Conciliación anual: ${number(s.demand,1)} pedidos = ${number(s.sales,1)} entregados + ${number(s.lost,1)} perdidos + ${number(s.endingPending,1)} pendientes al cierre. Inventario final: ${number(s.endingStock,1)} u.</p><p class="source-note">Costo de oportunidad de las ventas perdidas (margen + USD 10): ${money(s.lostOpportunity)}. En caja solo se deducen los USD 10 de imagen; el margen de pedidos no vendidos ya está ausente y no se vuelve a restar.</p>`;
+}
+function renderStrategies() {
+  const evaluation=state.evaluation,list=[...state.comparison];
+  if(state.preset==='custom')list.push({id:'custom',name:'Tu plan de trabajo',description:'Configuración del panel.',...evaluation});
+  const best=list.toSorted((a,b)=>b.expected-a.expected)[0],worst=SCENARIOS.reduce((a,b)=>evaluation.runs[a].summary.npv<evaluation.runs[b].summary.npv?a:b);
+  return intro('03 / Decisiones de capacidad','Comparación de estrategias','Compara inversión, valor esperado y peor resultado en los tres escenarios.',SCENARIOS.map(s=>percent(state.cfg.probabilities[s],0)).join(' / '))+
+    ledger([metric('Valor esperado del plan',compactMoney(evaluation.expected),'VPN ponderado de tres escenarios','positive'),metric('Peor resultado del plan',compactMoney(evaluation.worst),LABELS[worst]),metric('Inversión en equipos',money(evaluation.runs.base.summary.investment),'límite sin aprobación: USD 120.000'),metric('Mejor política comparada',best.short??'Tu plan',compactMoney(best.expected)+' de valor esperado')])+
+    `<div class="section-head"><div><h2>Comparación de políticas</h2><p>Todos los valores económicos de esta matriz son VPN en USD.</p></div></div><div class="table-scroll" tabindex="0" role="region" aria-label="Comparación de estrategias en los tres escenarios"><table class="data-table strategy-table"><thead><tr><th>Política</th><th>Inversión</th><th>Base</th><th>Optimista</th><th>Canal</th><th>Valor esperado</th><th>Peor VPN</th></tr></thead><tbody>${list.map(x=>`<tr class="${x.id===state.preset?'selected':''}"><th scope="row">${x.name}${x.id===best.id?'<span class="tag">Mayor valor esperado comparado</span>':''}<p>${x.config.lines} líneas · ${x.config.operators} personas · ${x.config.shifts} turnos máx.<br>Lote ${x.config.lot} · colchón ${x.config.buffer}</p>${x.id!=='custom'?`<button type="button" data-preset="${x.id}">${x.id===state.preset?'Plan en pantalla':'Usar este plan'}</button>`:''}</th><td>${number(x.runs.base.summary.investment)}</td>${SCENARIOS.map(s=>`<td>${number(x.runs[s].summary.npv)}</td>`).join('')}<td class="${x.id===best.id?'best':''}">${number(x.expected)}</td><td>${number(x.worst)}</td></tr>`).join('')}</tbody></table></div>`+
+    `<p class="scroll-hint">Desplaza la matriz para ver todos los escenarios. Las hipótesis de demanda, calidad, cambios y rendimientos del panel se comparten; cada política conserva sus decisiones de lotes, colchón y equipos.</p>`+
+    `<div class="insight"><p><strong>${best.name}</strong> ofrece el mayor valor esperado entre las políticas mostradas. La planta actual queda como referencia. La tercera línea necesita ocho semanas: una orden en S0 llega en S9, después del Black Friday de S8.</p></div>`+
+    `<h2>El plan en cada escenario</h2><div class="table-scroll" style="margin-top:12px"><table class="data-table"><thead><tr><th>Escenario</th><th>Prob.</th><th>Servicio a tiempo</th><th>Entregados</th><th>Perdidos</th><th>S8, entregas / pedidos</th></tr></thead><tbody>${SCENARIOS.map(s=>{const run=evaluation.runs[s],t=run.summary,r=run.rows[7];return `<tr><th scope="row">${LABELS[s]}</th><td>${percent(evaluation.config.probabilities[s],0)}</td><td>${percent(t.service,2)}</td><td>${number(t.sales,1)}</td><td>${number(t.lost,1)}</td><td>${number(r.onTime,1)} / ${number(r.demand)}</td></tr>`;}).join('')}</tbody></table></div>`+
+    `<div class="two-notes"><div><h3>Regla por fases</h3><p>Desde S13, cada cuatro semanas se usa el promedio de pedidos de las cuatro anteriores. Un turno si cabe en 95% de su capacidad madura; dos si cabe en 95% de dos turnos; tres en otro caso. Las ampliaciones de turno llevan dos semanas de solicitud y aprendizaje nuevo.</p></div><div><h3>Qué se paga aunque no se produzca</h3><p>Las nóminas de los turnos abiertos y los costos fijos. Las inversiones se pagan al ordenar. Se recupera 80% del equipo al cierre, descontado. El supuesto de personal temporal permite reducir turnos; habría que confirmar el costo de salida antes de una decisión real.</p></div></div>`+
+    `<details class="plain-details"><summary>Puntos de decisión aplicados · ${LABELS[state.scenario]}</summary>${currentRun().events.length?`<ol class="events">${currentRun().events.map(e=>`<li><strong>S${e.week}:</strong> ${e.text}</li>`).join('')}</ol>`:'<p class="empty">Este plan mantiene los turnos programados; no tiene revisión secuencial activada.</p>'}</details>`;
+}
+function renderSensitivity() {
+  const result=sensitivity(state.cfg),scale=Math.max(1,...result.axes.flatMap(a=>[Math.abs(a.lowValue-result.central),Math.abs(a.highValue-result.central)]));
+  const r=currentRow(),cap1=matureGood(state.cfg,state.week,r.lines,r.cells,1),cap2=matureGood(state.cfg,state.week,r.lines,r.cells,2);
+  const phase=state.comparison.find(x=>x.id==='fases'),fixed=state.comparison.find(x=>x.id==='reequilibrio');
+  const threshold=probabilityThreshold(phase,fixed);
+  const bar=(v,high=false)=>{const delta=v-result.central,width=Math.abs(delta)/scale*49,left=delta>=0?50:50-width;return `<span class="${high?'high':''}" style="left:${left}%;width:${width}%"></span>`;};
+  const zero=evaluate({...state.cfg,buffer:0}),central=evaluate(state.cfg),zeroPeak=zero.runs.optimista.rows[7];
+  return intro('04 / Sensibilidad y umbrales','Sensibilidad del plan','Recalcula una variable a la vez para ver su efecto sobre el valor esperado.','VPN esperado · USD')+
+    ledger([metric('Valor esperado central',compactMoney(result.central),'con las probabilidades del panel','positive'),metric('Umbral de un turno',number(cap1*.95),'pedidos/semana observados, a 95%'),metric('Umbral de dos turnos',number(cap2*.95),'pedidos/semana observados, a 95%'),metric('Inversión disponible',money(120000-central.runs.base.summary.investment),'antes de requerir aprobación')])+
+    `<div class="section-head"><div><h2>Desviación del valor esperado</h2><p>Menor valor hacia la izquierda, mayor hacia la derecha. Verde: extremo inferior del parámetro; óxido: extremo superior.</p></div></div>`+
+    `<div class="tornado-list">${result.axes.filter(a=>state.cfg.cells>0||!Object.hasOwn(a.a,'cellPenalty')).map(a=>`<div class="tornado"><div class="tornado-title">${a.label}<small>${a.low} → ${a.high}</small></div><div class="tornado-bar" aria-hidden="true">${bar(a.lowValue)}${bar(a.highValue,true)}</div><div class="tornado-values"><span>${a.lowValue>=result.central?'+':''}${number(a.lowValue-result.central)}</span><span>${a.highValue>=result.central?'+':''}${number(a.highValue-result.central)}</span></div></div>`).join('')}</div>`+
+    `<p class="table-note">Rangos de lotes, mezcla y polivalencia: guía del caso. Fallas y rendimientos: pruebas alrededor del dato del anexo, no nuevos hechos. Con células, también se evalúa la polivalencia.</p>`+
+    `<div class="thresholds"><div class="threshold"><h3>Pedidos observados antes de abrir otro turno</h3><p>Con los equipos de S${state.week}, la regla por fases utiliza <strong>${number(cap1*.95)} u</strong> para pasar de uno a dos turnos y <strong>${number(cap2*.95)} u</strong> para pasar de dos a tres. Se contrasta el promedio de cuatro semanas; no se identifica de antemano qué escenario ocurrirá.</p><p>Son umbrales operativos propuestos con una reserva de 5%; no son puntos de equilibrio de rentabilidad.</p></div><div class="threshold"><h3>Probabilidad de llenado de canal</h3><p>${threshold===null?'Con los supuestos actuales, las políticas F y C no cruzan sus valores esperados entre 0% y 100% de canal, manteniendo la proporción base:optimista en 2:1. Compara sus resultados por escenario en la matriz.':`F y C igualan su valor esperado con ${percent(threshold)} de probabilidad de canal, manteniendo base:optimista en 2:1. Revisa cuál queda por encima en la matriz antes de elegir.`}</p></div></div>`+
+    `<div class="insight"><p><strong>El colchón tiene un costo y una función.</strong> Con cero unidades de colchón, el valor esperado sería ${money(zero.expected)} (${zero.expected>=central.expected?'+':''}${money(zero.expected-central.expected)} frente al plan). En S8 optimista se atenderían a tiempo ${number(zeroPeak.onTime,1)} de ${number(zeroPeak.demand)} pedidos. El plan actual atiende ${number(central.runs.optimista.rows[7].onTime,1)}.</p></div>`+
+    `<p class="source-note">Una mayor mezcla Pro puede mejorar el margen aun cuando reduzca el ritmo. La recomendación depende de precios, demanda, costos de personal y disponibilidad real. Este análisis conserva los demás parámetros y la política de revisión del plan.</p>`;
+}
+function renderMethod() {
+  const actual=controls();
+  $('#method-content').innerHTML=`<h2>Valores de control del profesor</h2><p>Configuración actual: dos líneas, seis personas por línea, un turno, lote 100, cambio 20 minutos y 30% Pro. Es independiente del plan que estés editando.</p><div class="table-scroll"><table class="data-table"><thead><tr><th>Indicador</th><th>Caso</th><th>Modelo</th><th>Verificación</th></tr></thead><tbody>${CONTROL_TARGETS.map(([key,label,target,places,unit])=>`<tr><th scope="row">${label}</th><td>${number(target,places)} ${unit}</td><td>${number(actual[key],places)} ${unit}</td><td>${Number(actual[key].toFixed(places))===target?'Coincide':'Revisar'}</td></tr>`).join('')}</tbody></table></div><h2>Fórmulas trazables</h2><p class="formula">T = horas productivas × 60 × 5 × rendimiento × aprendizaje<br>Ciclo por variante = máximo de sus estaciones<br>Ciclo mezcla = (1 − Pro) × ciclo Std + Pro × ciclo Pro<br>Capacidad línea = T / (ciclo mezcla + cambio / lote)<br>Buenas = primera pasada + retrabajo recuperado, limitado por minutos<br>Balance = contenido / (estaciones × ciclo)<br>Flujo = WIP / ritmo de producción<br>VE = Σ probabilidad × VPN<br>i semanal = (1,12)^(1/52) − 1<br>VPN = Σ (caja operativa − inversión) / (1 + i)^semana + residual descontado</p><p>En células, la capacidad del conjunto de trabajadores es T / [contenido × (1 + polivalencia) / trabajadores efectivos + 5 / lote]. Los trabajadores efectivos incorporan la curva de aprendizaje. El cálculo de empaque usa 5 + 4/6 minutos.</p><h2>Supuestos adicionales</h2><ol>${ASSUMPTIONS.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><p>La plantilla original se conserva remunerada; al subcontratar, los operadores originales liberados quedan disponibles, sin ahorro salarial por despido. No se activa la rotación opcional del 2% mensual. Los lotes no se redondean a unidades completas. Los resultados decimales expresan valores esperados.</p><h2>Fuente y uso de IA</h2><p>${SOURCE.author}. (s. f.). <em>${SOURCE.title}</em> [Caso docente, anexos 1 a 11 y guía del tablero]. UNAPEC, ISO939. <a href="${SOURCE.url}" target="_blank" rel="noreferrer">Documento en Canvas</a>.</p><p>El caso permite herramientas de IA o de BI. Se utilizó ChatGPT para programar el simulador, contrastar fórmulas y redactar los documentos. Los datos proceden del caso; las decisiones y los supuestos se identifican para revisión. </p>`;
+}
+function render() {
+  const views={plant:renderPlant,weeks:renderWeeks,strategies:renderStrategies,sensitivity:renderSensitivity};
+  if($('#week-table'))state.tableOpen=$('#week-table').open;
+  if($('#week-costs'))state.costOpen=$('#week-costs').open;
+  syncPending();
+  $('#results').innerHTML=state.invalid?intro('Configuración pendiente','Revisa la configuración','Corrige los campos señalados en Configurar plan y vuelve a calcular.')+`<div class="errors">${state.invalid.map(x=>`<p>${esc(x)}</p>`).join('')}</div>`:views[state.tab]();
+  $('#plan-label').textContent=`${STRATEGIES.find(s=>s.id===state.preset)?.name??'Plan de trabajo'} · ${LABELS[state.scenario]}`;
+  for(const button of document.querySelectorAll('[data-view]')){if(button.dataset.view===state.tab)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');}
+}
+function exportCsv() {
+  if(state.dirty){$('#form-status').textContent='Calcula los cambios antes de descargar.';$('#form-status').scrollIntoView({block:'nearest'});return;}
+  const scalarKeys=['week','date','demand','mix','productionMix','lines','cells','shifts','saturday','capacityGross','capacityGood','gross','good','scrap','reworked','reworkPending','sales','onTime','late','lost','pending','inventory','service','staff','hired','released','learning','labor','laborPerGood','revenue','materials','outsourceCost','carry','backlogCost','imageCost','warranty','rent','fixed','hireCost','leaseLiability','cost','operatingCash','capex','investment','cumulativeNpv','area','areaAvailable','contribution','outsourcedUnits'];
+  const titles=['escenario','semana','fecha','demanda_u','pro_demanda','pro_produccion','lineas','celulas','turnos','sabado','capacidad_bruta_u','capacidad_buena_u','produccion_bruta_u','produccion_buena_u','desecho_u','retrabajo_u','retrabajo_pendiente_u','entregado_u','a_tiempo_u','atrasado_u','perdido_u','pendiente_u','inventario_u','servicio_a_tiempo','personal_incl_supervisor','contrataciones','salidas','aprendizaje','mano_obra_USD','MO_por_buena_USD','ingresos_USD','materiales_USD','puerta_externa_USD','inventario_costo_USD','pendientes_costo_USD','imagen_USD','garantia_USD','alquiler_USD','fijos_USD','formacion_USD','obligacion_alquiler_USD','costo_total_USD','caja_operativa_USD','inversion_semana_USD','inversion_acumulada_USD','VPN_acumulado_sin_residual_USD','area_m2','area_disponible_m2','contribucion_antes_MO_USD','puertas_externas_u','stock_Std','stock_Pro','pendiente_Std','pendiente_Pro'];
+  const rows=SCENARIOS.flatMap(s=>state.evaluation.runs[s].rows.map(r=>[LABELS[s],...scalarKeys.map(k=>r[k]),...r.inventorySKU,...r.pendingSKU]));
+  const quote=x=>`"${String(typeof x==='number'?Number(x.toFixed(6)):x??'').replace(/"/g,'""')}"`;
+  const text='\uFEFF'+[titles,...rows].map(row=>row.map(quote).join(';')).join('\r\n');
+  const url=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'})),link=document.createElement('a');
+  link.href=url;link.download='Resguarda_52_semanas_3_escenarios.csv';link.click();URL.revokeObjectURL(url);
+  $('#form-status').textContent='Se preparó el CSV de los tres escenarios (156 filas).';
+}
+form.addEventListener('submit',event=>{event.preventDefault();state.scenario=field('scenario').value;calculate(readForm());});
+form.addEventListener('input',event=>{if(event.target.name==='preset'||event.target.name==='scenario')return;state.dirty=true;syncApplicability();syncPending();$('#form-status').textContent='Hay cambios pendientes. Pulsa Calcular plan para ver su efecto.';});
+selectPreset.addEventListener('change',()=>{if(selectPreset.value!=='custom')loadPreset(selectPreset.value);});
+$('#scenario').addEventListener('change',event=>{state.scenario=event.target.value;render();});
+$('#reset-plan').addEventListener('click',()=>loadPreset(state.preset==='custom'?'fases':state.preset,true));
+$('#download-csv').addEventListener('click',exportCsv);
+document.addEventListener('click',event=>{
+  const correction=event.target.closest('[data-focus-field]');if(correction){event.preventDefault();const input=field(correction.dataset.focusField);const panel=input.closest('.more-controls');if(panel)panel.open=true;input.focus();return;}
+  const view=event.target.closest('[data-view]');if(view){state.tab=view.dataset.view;render();return;}
+  const variant=event.target.closest('[data-variant]');if(variant){state.variant=variant.dataset.variant;render();return;}
+  const preset=event.target.closest('[data-preset]');if(preset){loadPreset(preset.dataset.preset);return;}
+  const week=event.target.closest('[data-week]');if(week){state.week=Number(week.dataset.week);render();$('#week-range')?.focus();}
+});
+document.addEventListener('input',event=>{if(event.target.id==='week-range'){$('output[for="week-range"]').textContent=`S${event.target.value}`;}});
+document.addEventListener('change',event=>{if(event.target.id==='week-range'){state.week=Number(event.target.value);const focus=event.target===document.activeElement;render();if(focus)$('#week-range')?.focus();}});
+if(matchMedia('(max-width: 800px)').matches)$('#control-panel').open=false;
+for(const input of form.querySelectorAll('input,select'))if(!input.id)input.id=input.name;
+let chartResizeTimer;
+window.addEventListener('resize',()=>{clearTimeout(chartResizeTimer);chartResizeTimer=setTimeout(()=>{if(state.tab==='weeks')render();},150);});
+fillForm(state.cfg);renderMethod();calculate(state.cfg);
+
+})();</script>
+</body>
+</html>
