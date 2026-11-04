@@ -5,38 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <meta name="description" content="Simulador del caso Resguarda: capacidad, demanda y decisiones de inversión durante 52 semanas.">
-  <title>Resguarda | Mesa de planificación</title>
+  <title>Resguarda | Simulador de producción</title>
   <style>/* STYLES */</style>
 </head>
 <body>
   <a class="skip" href="#analysis">Saltar a los resultados</a>
   <header class="masthead">
     <div class="identity"><a class="wordmark" href="#analysis">Resguarda</a><span>Simulador de producción</span></div>
-    <p class="horizon">HCC · Caso académico<span>05 oct 2026 a 01 oct 2027 · 52 semanas · USD</span></p>
+    <p class="horizon">52 semanas<span>05 oct 2026 a 01 oct 2027 · USD</span></p>
   </header>
   <section class="plan-toolbar" aria-label="Plan y escenario">
-    <div class="field"><label for="preset">Estrategia</label><select id="preset" name="preset" form="plan-form"></select></div>
+    <div class="field"><label for="preset">Plan</label><select id="preset" name="preset" form="plan-form"></select></div>
     <div class="field"><label for="scenario">Escenario</label><select name="scenario" id="scenario" form="plan-form"><option value="base">Base</option><option value="optimista">Optimista</option><option value="canal">Llenado de canal</option></select></div>
     <button type="button" id="open-settings" aria-haspopup="dialog" aria-controls="control-panel">Ajustar plan</button>
     <button type="button" class="quiet" id="download-csv" aria-label="Descargar resultados CSV">Descargar CSV</button>
-    <p class="control-help" id="preset-description"></p>
+    <p class="sr-only" id="preset-description"></p>
   </section>
   <nav class="views" aria-label="Vistas del simulador">
     <button type="button" data-view="plant" aria-current="page">Planta</button>
     <button type="button" data-view="weeks">Producción</button>
-    <button type="button" data-view="strategies">Estrategias</button>
-    <button type="button" data-view="sensitivity">Sensibilidad</button>
+    <button type="button" data-view="strategies">Comparar</button>
+    <button type="button" data-view="sensitivity">Cambios</button>
   </nav>
   <div class="workspace">
     <main id="analysis" tabindex="-1">
       <p id="plan-label" class="sr-only"></p>
       <p id="pending-notice" class="pending-notice" role="status" hidden>Hay cambios sin calcular. Los resultados corresponden al último plan calculado.</p>
       <div id="results"></div>
-      <details class="method"><summary>Datos, fórmulas y validación</summary><div id="method-content"></div></details>
+      <details class="method"><summary>Datos y cálculos</summary><div id="method-content"></div></details>
     </main>
   </div>
   <dialog id="control-panel" class="controls" aria-labelledby="settings-title">
-    <div class="dialog-head"><div><h2 id="settings-title">Ajustar plan</h2><p>Modifica los valores y calcula para ver el resultado.</p></div><button type="button" id="close-settings">Cerrar</button></div>
+    <div class="dialog-head"><div><h2 id="settings-title">Ajustar plan</h2></div><button type="button" id="close-settings">Cerrar</button></div>
     <form id="plan-form" novalidate>
       <div class="dialog-body">
         <div id="form-errors" class="errors" role="alert" tabindex="-1" hidden></div>
@@ -47,7 +47,7 @@
             <label class="field">Turnos máximos<select name="shifts"><option value="1">1 turno</option><option value="2">2 turnos</option><option value="3">3 turnos</option></select></label>
             <div class="field-pair"><label data-for="shift2Start">Segundo desde semana<input name="shift2Start" type="number" min="1" max="52" step="1" required></label><label data-for="shift3Start">Tercero desde semana<input name="shift3Start" type="number" min="1" max="52" step="1" required></label></div>
             <label class="field">Sábados por mes<select name="saturdays"><option value="0">0</option><option value="1">Hasta 1</option><option value="2">Hasta 2</option><option value="3">Hasta 3</option></select></label>
-            <label class="check"><input name="sequential" type="checkbox"> Revisar turnos por fases desde S13</label>
+            <label class="check"><input name="sequential" type="checkbox"> Revisar turnos desde la semana 13</label>
           </fieldset>
           <details class="more-controls" id="additional-options"><summary>Células y puerta</summary>
             <fieldset><legend class="sr-only">Células y puerta</legend>
@@ -66,8 +66,8 @@
           <details class="more-controls" id="demand-assumptions"><summary>Probabilidades y mezcla</summary>
             <fieldset><legend class="sr-only">Demanda</legend>
               <div class="probabilities"><label>Base %<input name="probBase" type="number" min="0" max="100" step="1" required></label><label>Optimista %<input name="probOptimistic" type="number" min="0" max="100" step="1" required></label><label>Canal %<input name="probChannel" type="number" min="0" max="100" step="1" required></label></div>
-              <div class="field-pair"><label>Pro S1 a S26 (%)<input name="proFirst" type="number" min="20" max="50" step="1" required></label><label>Pro S27 a S52 (%)<input name="proSecond" type="number" min="20" max="50" step="1" required></label></div>
-              <p class="control-help">Las probabilidades suman 100%. Estos supuestos se aplican a las seis estrategias comparadas.</p>
+              <div class="field-pair"><label>Pro, semanas 1 a 26 (%)<input name="proFirst" type="number" min="20" max="50" step="1" required></label><label>Pro, semanas 27 a 52 (%)<input name="proSecond" type="number" min="20" max="50" step="1" required></label></div>
+              <p class="control-help">Las probabilidades suman 100%. Se aplican a los seis planes.</p>
             </fieldset>
           </details>
           <details class="more-controls" id="quality-assumptions"><summary>Calidad y rendimientos</summary>
@@ -84,7 +84,6 @@
       <div class="form-actions"><p id="form-status" class="control-help" role="status" aria-live="polite">Plan calculado.</p><button class="quiet" type="button" id="reset-plan">Restablecer</button><button class="primary" type="submit">Calcular plan</button></div>
     </form>
   </dialog>
-  <footer class="footer"><p>Resguarda · HCC · Caso académico ISO939</p><p>Félix J. Rodriguez P. <a href="https://canvas.unapec.edu.do/courses/36755/files/11584186?wrap=1" target="_blank" rel="noreferrer">Caso del maestro en Canvas</a></p><p>Apoyo de ChatGPT: programación, verificación y redacción.</p></footer>
   <noscript><p class="errors">Activa JavaScript para calcular el simulador. Los archivos fuente incluyen los datos y las fórmulas.</p></noscript>
   <script>/* APPLICATION */</script>
 </body>

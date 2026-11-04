@@ -7,10 +7,10 @@ Práctica 2da Eva. Parcial de ISO939, Integración de Aplicaciones. Simula el ca
 ## Uso
 
 1. Comenzar con la estrategia F y el escenario Base.
-2. En Planta, recorrer las semanas y revisar capacidad, demanda y cuellos de botella. Los detalles se abren en Cálculos y recursos.
+2. En Planta, recorrer las semanas y revisar capacidad, demanda y cuellos de botella. Los detalles se abren en Cálculos de la semana.
 3. En Producción, revisar las 52 semanas, el inventario y los pedidos pendientes. La tabla semanal se abre a petición.
-4. En Estrategias, comparar seis políticas en tres escenarios, con valor esperado y peor caso.
-5. En Sensibilidad, cambiar un supuesto a la vez para ver cuánto afecta el resultado.
+4. En Comparar, comparar seis políticas en tres escenarios, con valor esperado y peor caso.
+5. En Cambios, cambiar un supuesto a la vez para ver cuánto afecta el resultado.
 6. Para probar otro plan, pulsar Ajustar plan, cambiar los valores y pulsar Calcular plan. Cerrar conserva el borrador; un cálculo válido cierra los ajustes y muestra los resultados. El CSV contiene los tres escenarios del plan calculado.
 
 ## Tecnología
@@ -43,8 +43,6 @@ Para actualizar Pages, ejecutar el build, copiar `dist/index.html` a `docs/index
 
 Modelo semanal determinista de valores esperados, de octubre de 2026 a octubre de 2027. No es una simulación de eventos discretos ni una optimización exhaustiva. Distingue datos del caso y supuestos adicionales; los supuestos y la tabla de validación se pueden consultar en el tablero.
 
-La política F reequilibra las dos líneas con ocho personas, incorpora turnos por etapas y revisa la demanda observada desde S13. Su inversión es USD 18.000. Con probabilidades de 50%, 25% y 25%, el VPN esperado es aproximadamente USD 3.369.328. Es la mejor de las seis políticas evaluadas con estos supuestos.
+La política F reequilibra las dos líneas con ocho personas, incorpora turnos por etapas y revisa la demanda observada desde la semana 13. Su inversión es USD 18.000. Con probabilidades de 50%, 25% y 25%, el VPN esperado es aproximadamente USD 3.369.328. Es la mejor de las seis políticas evaluadas con estos supuestos.
 
 Fuente: [caso del docente en Canvas](https://canvas.unapec.edu.do/courses/36755/files/11584186?wrap=1), anexos 1 a 11 y guía del tablero. El documento completo requiere acceso institucional y no se redistribuye aquí.
-
-Se utilizó ChatGPT para programar el simulador, comprobar fórmulas y revisar la redacción. Los datos proceden del caso docente.
